@@ -46,6 +46,14 @@ public class Pixel implements Comparable<Pixel >{
 		this.blue = blue;
 	}
 	
+	public double percentDifference(Pixel other) {
+		return (double)(this.compareTo(other)) / (255 * 3);
+	}
+	
+	public static double colorDifference(int color1, int color2) {
+		return new Pixel(color1).percentDifference(new Pixel(color2));
+	}
+	
 	@Override
 	public int compareTo(Pixel other) {
 		return Math.abs(this.getRed() - other.getRed())
@@ -56,6 +64,17 @@ public class Pixel implements Comparable<Pixel >{
 	@Override
 	public boolean equals(Object other) {
 		return other instanceof Pixel && this.compareTo((Pixel)other) == 0;
+	}
+	
+	public static void main(String[] args) {
+		Pixel white = new Pixel(0xFFFFFF);
+		Pixel black = new Pixel(0, 0, 0);
+		Pixel gray = new Pixel(new Color(0x808080));
+		Pixel offWhite = new Pixel(0xFEFEFE);
+		System.out.println("White-black: " + white.percentDifference(black));
+		System.out.println("Black-gray: " + black.percentDifference(gray));
+		System.out.println("White-off white: " + white.percentDifference(offWhite));
+		System.out.println("Black-off white: " + offWhite.percentDifference(black));
 	}
 
 }
