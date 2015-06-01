@@ -2,7 +2,6 @@ package io.github.zachohara.imagecomparator;
 
 import java.awt.FileDialog;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.concurrent.CancellationException;
 
 import javax.swing.JFrame;
@@ -12,6 +11,8 @@ public class FileSelector {
 	private JFrame window;
 	private FileDialog fileChooserAWT;
 //	private JFileChooser fileChooserSwing;
+	
+	public static final String[] ACCEPTED_FILETYPES = {"png", "jpeg", "jpg", "gif"};
 	
 	public static final String SUPER_DIRECTORY = "C:/";
 	public static final String WINDOW_TITLE = "Select files to compare";
@@ -26,7 +27,6 @@ public class FileSelector {
 			this.fileChooserAWT.setMode(FileDialog.LOAD);
 			this.fileChooserAWT.setDirectory(SUPER_DIRECTORY);
 			this.fileChooserAWT.setMultipleMode(true);
-			this.fileChooserAWT.setFilenameFilter(new ImageFilter());
 		} else {
 			throw new UnsupportedOperationException("Cannot load using swing");
 		}
@@ -45,16 +45,6 @@ public class FileSelector {
 		if (selected.length != 0)
 			return selected;
 		throw new CancellationException();
-	}
-	
-	private static class ImageFilter implements FilenameFilter {
-
-		@Override
-		public boolean accept(File file, String filename) {
-			// TODO Auto-generated method stub
-			throw new UnsupportedOperationException();
-		}
-		
 	}
 
 }
