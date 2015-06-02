@@ -1,12 +1,14 @@
 package io.github.zachohara.imagecomparator.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -45,11 +47,12 @@ public class Window {
 		this.leftPanel = new JPanel();
 		this.rightPanel = new JPanel();
 		this.formatSides();
+		this.formatBottom();
 	}
 
 	private void formatTitle() {
 		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new FlowLayout());
+		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		JLabel text = new JLabel("Select an image to keep:");
 		text.setFont(new Font(text.getFont().getName(), Font.PLAIN, 25));
 		topPanel.add(text);
@@ -67,6 +70,29 @@ public class Window {
 		this.window.add("West", this.leftPanel);
 		this.window.add("East", this.rightPanel);
 	}
+	
+	private void formatBottom() {
+		JPanel bottom = new JPanel();
+		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
+		Button keepBoth = new Button("Keep Both");
+		Button deleteBoth = new Button("Delete Both");
+		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+		bottom.add(keepBoth);
+		bottom.add(deleteBoth);
+		this.window.add("South", bottom);
+	}
+	
+//	private void formatBottom() {
+//		JPanel bottom = new JPanel();
+//		bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
+//		Button keepBoth = new Button("Keep Both");
+//		Button deleteBoth = new Button("Delete Both");
+//		keepBoth.setSize(50, 50);
+//		deleteBoth.setSize(50, 50);
+//		bottom.add(keepBoth);
+//		bottom.add(deleteBoth);
+//		this.window.add("South", bottom);
+//	}
 
 	public static void main(String[] args) {
 		Window w = new Window();
