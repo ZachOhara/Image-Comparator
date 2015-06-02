@@ -3,6 +3,7 @@ package io.github.zachohara.imagecomparator.gui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -18,6 +19,8 @@ public class Window {
 	private JFrame window;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private Component rigidAreaLeft;
+	private Component rigidAreaRight;
 
 	public Window() {
 		this.initializeWinow();
@@ -30,6 +33,16 @@ public class Window {
 	
 	public void handleWindowResize() {
 		System.out.println("Resize! " + System.currentTimeMillis());
+		int newWidth = this.window.getSize().width;
+		if (this.rigidAreaLeft != null)
+			this.leftPanel.remove(this.rigidAreaLeft);
+		if (this.rigidAreaRight != null)
+			this.rightPanel.remove(this.rigidAreaRight);
+		this.rigidAreaLeft = Box.createRigidArea(new Dimension(newWidth / 2, 0));
+		this.rigidAreaRight = Box.createRigidArea(new Dimension(newWidth / 2, 0));
+		this.leftPanel.add(this.rigidAreaLeft);
+		this.rightPanel.add(this.rigidAreaRight);
+		this.window.repaint();
 	}
 
 	private void initializeWinow() {
@@ -60,11 +73,7 @@ public class Window {
 	}
 	
 	private void formatSides() {
-		JPanel[] bothSides = {this.leftPanel, this.rightPanel};
-		for (JPanel side : bothSides) {
-			int width = this.window.getSize().width / 2;
-			side.add(Box.createRigidArea(new Dimension(width, 0)));
-		}
+		this.handleWindowResize();
 		this.leftPanel.setBackground(Color.BLUE);
 		this.rightPanel.setBackground(Color.RED);
 		this.window.add("West", this.leftPanel);
