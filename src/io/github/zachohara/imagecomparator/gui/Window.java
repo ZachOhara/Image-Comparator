@@ -1,5 +1,6 @@
 package io.github.zachohara.imagecomparator.gui;
 
+import io.github.zachohara.imagecomparator.FileSelector;
 import io.github.zachohara.imagecomparator.image.Image;
 
 import java.awt.BorderLayout;
@@ -9,6 +10,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -55,15 +58,28 @@ public class Window {
 	}
 	
 	public void setImages(Image left, Image right) {
-		//TODO
+		this.setLeftImage(left);
+		this.setRightImage(right);
 	}
 	
 	public void setLeftImage(Image left) {
-		//TODO
+		this.leftInfoPanel.removeAll();
+		this.leftInfoPanel.add(new JLabel(left.getName()));
+		this.leftInfoPanel.add(new JLabel(left.getDimensionString()));
+		this.leftPanel.add("Center", left.toComponenet());
+		this.leftInfoPanel.repaint();
+		this.leftPanel.repaint();
+		this.window.repaint();
 	}
 	
 	public void setRightImage(Image right) {
-		//TODO
+		this.rightInfoPanel.removeAll();
+		this.rightInfoPanel.add(new JLabel(right.getName()));
+		this.rightInfoPanel.add(new JLabel(right.getDimensionString()));
+		this.rightPanel.add("Center", right.toComponenet());
+		this.rightInfoPanel.repaint();
+		this.rightPanel.repaint();
+		this.window.repaint();
 	}
 
 	private void initializeWinow() {
@@ -109,6 +125,13 @@ public class Window {
 		this.rightInfoPanel = new JPanel();
 		this.leftInfoPanel.setLayout(new BoxLayout(this.leftInfoPanel, BoxLayout.Y_AXIS));
 		this.rightInfoPanel.setLayout(new BoxLayout(this.rightInfoPanel, BoxLayout.Y_AXIS));
+		
+		this.leftInfoPanel.add(new JLabel("Image Name Here"));
+		this.rightInfoPanel.add(new JLabel("Image Name Here"));
+		this.leftInfoPanel.add(new JLabel("100x100"));
+		this.rightInfoPanel.add(new JLabel("100x100"));
+		
+		
 		this.leftPanel.add("North", this.leftInfoPanel);
 		this.rightPanel.add("North", this.rightInfoPanel);
 	}
@@ -130,5 +153,15 @@ public class Window {
 		Window w = new Window();
 		w.setVisible(true);
 	}
+	
+//	public static void main(String[] args) throws IOException {
+//		Window w = new Window();
+//		w.setVisible(true);
+//		FileSelector filedialog = new FileSelector();
+//		File[] f = filedialog.getFiles();
+//		Image l = new Image(f[0]);
+//		Image r = new Image(f[1]);
+//		w.setImages(l, r);
+//	}
 
 }
