@@ -44,6 +44,11 @@ public class Window {
 		this.rightPanel.add(this.rigidAreaRight);
 		this.window.repaint();
 	}
+	
+	public void handleButtonPress(String button) {
+		System.out.println(button);
+		//TODO: handle button presses
+	}
 
 	private void initializeWinow() {
 		this.window = new JFrame("Image Comparator by Zach Ohara");
@@ -51,8 +56,7 @@ public class Window {
 		this.window.setSize(1000, 600);
 		this.window.setResizable(true);
 		this.window.setLocationRelativeTo(null);
-		this.window.addComponentListener(
-				new Listener.WindowResizeListener(this));
+		this.window.addComponentListener(new Listener.WindowResizeListener(this));
 	}
 
 	private void formatWindow() {
@@ -86,23 +90,13 @@ public class Window {
 		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 		Button keepBoth = new Button("Keep Both");
 		Button deleteBoth = new Button("Delete Both");
+		keepBoth.addActionListener(new Listener.ButtonListener(this, "keep both"));
+		deleteBoth.addActionListener(new Listener.ButtonListener(this, "delete both"));
 		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		bottom.add(keepBoth);
 		bottom.add(deleteBoth);
 		this.window.add("South", bottom);
 	}
-	
-//	private void formatBottom() {
-//		JPanel bottom = new JPanel();
-//		bottom.setLayout(new FlowLayout(FlowLayout.CENTER));
-//		Button keepBoth = new Button("Keep Both");
-//		Button deleteBoth = new Button("Delete Both");
-//		keepBoth.setSize(50, 50);
-//		deleteBoth.setSize(50, 50);
-//		bottom.add(keepBoth);
-//		bottom.add(deleteBoth);
-//		this.window.add("South", bottom);
-//	}
 
 	public static void main(String[] args) {
 		Window w = new Window();
