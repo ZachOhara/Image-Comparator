@@ -1,5 +1,7 @@
 package io.github.zachohara.imagecomparator.gui;
 
+import io.github.zachohara.imagecomparator.image.Image;
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -19,6 +21,8 @@ public class Window {
 	private JFrame window;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JPanel leftInfoPanel;
+	private JPanel rightInfoPanel;
 	private Component rigidAreaLeft;
 	private Component rigidAreaRight;
 
@@ -49,6 +53,18 @@ public class Window {
 		System.out.println(button);
 		//TODO: handle button presses
 	}
+	
+	public void setImages(Image left, Image right) {
+		//TODO
+	}
+	
+	public void setLeftImage(Image left) {
+		//TODO
+	}
+	
+	public void setRightImage(Image right) {
+		//TODO
+	}
 
 	private void initializeWinow() {
 		this.window = new JFrame("Image Comparator by Zach Ohara");
@@ -62,9 +78,8 @@ public class Window {
 	private void formatWindow() {
 		this.window.setLayout(new BorderLayout());
 		this.formatTitle();
-		this.leftPanel = new JPanel();
-		this.rightPanel = new JPanel();
 		this.formatSides();
+		this.formatInfoPanels();
 		this.formatBottom();
 	}
 
@@ -78,11 +93,24 @@ public class Window {
 	}
 	
 	private void formatSides() {
+		this.leftPanel = new JPanel();
+		this.rightPanel = new JPanel();
 		this.handleWindowResize();
+		this.leftPanel.setLayout(new BorderLayout());
+		this.rightPanel.setLayout(new BorderLayout());
 		this.leftPanel.setBackground(Color.BLUE);
 		this.rightPanel.setBackground(Color.RED);
 		this.window.add("West", this.leftPanel);
 		this.window.add("East", this.rightPanel);
+	}
+	
+	private void formatInfoPanels() {
+		this.leftInfoPanel = new JPanel();
+		this.rightInfoPanel = new JPanel();
+		this.leftInfoPanel.setLayout(new BoxLayout(this.leftInfoPanel, BoxLayout.Y_AXIS));
+		this.rightInfoPanel.setLayout(new BoxLayout(this.rightInfoPanel, BoxLayout.Y_AXIS));
+		this.leftPanel.add("North", this.leftInfoPanel);
+		this.rightPanel.add("North", this.rightInfoPanel);
 	}
 	
 	private void formatBottom() {
