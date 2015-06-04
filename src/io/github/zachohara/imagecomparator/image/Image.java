@@ -1,10 +1,13 @@
 package io.github.zachohara.imagecomparator.image;
 
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 public class Image {
 
@@ -59,13 +62,21 @@ public class Image {
 		return this.name;
 	}
 	
+	public String getDimensionString() {
+		return this.image.getWidth() + "x" + this.image.getHeight();
+	}
+	
 	public BufferedImage getImage() {
 		return this.image;
 	}
 	
+	public Component toComponenet() {
+		return new JLabel(new ImageIcon(this.image));
+	}
+	
 	@Override
 	public String toString() {
-		return "\"" + this.name + "\"[" + this.image.getWidth() + "x" + this.image.getHeight() + "]";
+		return "\"" + this.name + "\"[" + this.getDimensionString() + "]";
 	}
 
 }
