@@ -36,7 +36,8 @@ public class Window {
 		this.window.setSize(1000, 600);
 		this.window.setResizable(true);
 		this.window.setLocationRelativeTo(null);
-		this.window.addComponentListener(new WindowResizeListener(this));
+		this.window.addComponentListener(
+				new Listener.WindowResizeListener(this));
 	}
 
 	private void formatWindow() {
