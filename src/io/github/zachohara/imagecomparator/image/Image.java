@@ -55,6 +55,14 @@ public class Image {
 		return sum / elements;
 	}
 	
+	public String getName() {
+		return this.name;
+	}
+	
+	public BufferedImage getImage() {
+		return this.image;
+	}
+	
 	@Override
 	public String toString() {
 		return "\"" + this.name + "\"[" + this.image.getWidth() + "x" + this.image.getHeight() + "]";
