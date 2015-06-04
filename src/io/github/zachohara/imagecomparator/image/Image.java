@@ -1,12 +1,12 @@
 package io.github.zachohara.imagecomparator.image;
 
-import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 public class Image {
@@ -70,7 +70,7 @@ public class Image {
 		return this.image;
 	}
 	
-	public Component toComponenet() {
+	public JComponent toComponenet() {
 		return new JLabel(new ImageIcon(this.image));
 	}
 	
