@@ -5,9 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 public class Image {
 
@@ -68,10 +65,6 @@ public class Image {
 	
 	public BufferedImage getImage() {
 		return this.image;
-	}
-	
-	public JComponent toComponenet() {
-		return new JLabel(new ImageIcon(this.image));
 	}
 	
 	@Override

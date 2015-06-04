@@ -6,9 +6,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +21,6 @@ public class ImagePanel extends JPanel {
 	private JPanel infoPanel;
 	private JLabel filename;
 	private JLabel dimension;
-	private Image image;
 	private JComponent componentImage;
 	private Component rigidArea;
 	
@@ -56,6 +57,14 @@ public class ImagePanel extends JPanel {
 		this.repaint();
 	}
 	
+	public void setImage(Image i) {
+		this.componentImage = getComponent(i.getImage());
+		this.filename.setText(i.getName());
+		this.dimension.setText(i.getDimensionString());
+		this.add(this.componentImage);
+		//this.repaint();
+	}
+	
 	public void resize(int width) {
 		if (this.rigidArea != null)
 			this.remove(this.rigidArea);
@@ -78,6 +87,10 @@ public class ImagePanel extends JPanel {
 		panel.setFont(INFO_FONT);
 		panel.setAlignmentX(CENTER_ALIGNMENT);
 		this.infoPanel.add(panel);
+	}
+	
+	public static JComponent getComponent(BufferedImage bi) {
+		return new JLabel(new ImageIcon(bi));
 	}
 
 	public static void main(String[] args) {
