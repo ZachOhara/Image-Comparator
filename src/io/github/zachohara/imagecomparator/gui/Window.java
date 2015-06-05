@@ -21,14 +21,15 @@ import io.github.zachohara.imagecomparator.FileSelector;
 import io.github.zachohara.imagecomparator.image.Image;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.BoxLayout;
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -152,19 +153,35 @@ public class Window {
 		this.window.add("East", this.rightPanel);
 	}
 
+//	private void formatBottom() {
+//		JPanel bottom = new JPanel();
+//		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
+//		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+//		this.formatButton(bottom, KEEP_BOTH_LABEL);
+//		bottom.add(Box.createVerticalStrut(20));
+//		this.formatButton(bottom, DELETE_BOTH_LABEL);
+//		this.window.add("South", bottom);
+//	}
+	
 	private void formatBottom() {
 		JPanel bottom = new JPanel();
-		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
+		bottom.setLayout(new GridLayout(2,0));
 		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		this.formatButton(bottom, KEEP_BOTH_LABEL);
+		bottom.add(Box.createVerticalStrut(20));
 		this.formatButton(bottom, DELETE_BOTH_LABEL);
 		this.window.add("South", bottom);
 	}
 
 	private void formatButton(JPanel panel, String name) {
-		Button b = new Button(name);
+		JButton b = new JButton(name);
 		b.setPreferredSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
+		b.setSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
+//		b.setMaximumSize(b.getSize());
 		b.addActionListener(new Listener.ButtonListener(this, name));
+		b.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		b.setAlignmentY(JButton.CENTER_ALIGNMENT);
+//		b.setVisible(true);
 		panel.add(b);
 	}
 
