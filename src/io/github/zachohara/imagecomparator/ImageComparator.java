@@ -1,5 +1,6 @@
 package io.github.zachohara.imagecomparator;
 
+import io.github.zachohara.imagecomparator.gui.Window;
 import io.github.zachohara.imagecomparator.image.Image;
 
 import java.io.File;
@@ -11,20 +12,39 @@ import javax.swing.JOptionPane;
 
 public class ImageComparator {
 
-	private Image[] imageList; 
+	public Window window;
+	private List<Image> imageList;
+	
+	private static final double COMPARISON_THRESHHOLD = 0.15;
 
-	public ImageComparator(File[] fileArr) {
+	public ImageComparator(File[] fileArr, Window w) {
+		this.window = w;
 		List<File> fileList = this.generateFileList(fileArr);
 		this.populateImageList(fileList);
 	}
 
 	public void compareAll() {
-		for (int i = 0; i < imageList.length; i++) {
-			for (int j = i + 1; j < imageList.length; j++) {
-				//TODO: compare the images in a GUI
-				System.out.println("Comparing " + imageList[i] + " and " + imageList[j]);
-				System.out.println(imageList[i].percentDifference(imageList[j]) + ", "
-						+ imageList[j].percentDifference(imageList[i]));
+		for (int i = 0; i < imageList.size(); i++) {
+			for (int j = i + 1; j < imageList.size(); j++) {
+				Image left = this.imageList.get(i);
+				Image right = this.imageList.get(j);
+				if (left.percentDifference(right) < COMPARISON_THRESHHOLD) {
+					this.window.setImages(left, right);
+					int result = this.window.getChoice();
+					if (result == Window.KEEP_LEFT || result == Window.KEEP_NONE) {
+						right.getFile().delete();
+						imageList.remove(right);
+						j--;
+					} else if (result == Window.KEEP_RIGHT || result == Window.KEEP_NONE) {
+						right.getFile().delete();
+						imageList.remove(left);
+						i--;
+					}
+				}
+//				System.out.println(this.window.getChoice());
+//				System.out.println("Comparing " + imageList.get(i) + " and " + imageList.get(j));
+//				System.out.println(imageList.get(i).percentDifference(imageList.get(j)) + ", "
+//						+ imageList.get(j).percentDifference(imageList.get(i)));
 			}
 		}
 	}
@@ -49,10 +69,10 @@ public class ImageComparator {
 	}
 
 	private void populateImageList(List<File> fileList) {
-		this.imageList = new Image[fileList.size()];
+		this.imageList = new ArrayList<Image>();
 		for (int i = 0; i < fileList.size(); i++) {
 			try {
-				this.imageList[i] = new Image(fileList.get(i));
+				this.imageList.add(new Image(fileList.get(i)));
 			} catch (IOException e) {
 				e.printStackTrace();
 				warnLoadError(fileList.get(i).getName());
