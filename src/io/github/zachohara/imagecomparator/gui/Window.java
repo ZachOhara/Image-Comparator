@@ -51,7 +51,7 @@ public class Window {
 	}
 
 	public void handleWindowResize() {
-		System.out.println("Resize! " + System.currentTimeMillis());
+//		System.out.println("Resize! " + System.currentTimeMillis());
 		int newWidth = this.window.getWidth();
 		this.leftPanel.handleResize(newWidth / 2);
 		this.rightPanel.handleResize(newWidth / 2);
@@ -61,13 +61,24 @@ public class Window {
 	public int getChoice() {
 		this.result = 0;
 		this.waiting = true;
-		while (this.waiting);
+		while (this.isWaiting()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return this.result;
+	}
+	
+	private synchronized boolean isWaiting() {
+		return this.waiting;
 	}
 
 	public void handleButtonPress(String button) {
-		System.out.println(button);
-		if (this.waiting) {
+//		System.out.println(button);
+		if (this.isWaiting()) {
 			if (button == LEFT_LABEL)
 				this.result = KEEP_LEFT;
 			else if (button == RIGHT_LABEL)
