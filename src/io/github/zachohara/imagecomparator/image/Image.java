@@ -9,9 +9,11 @@ import javax.imageio.ImageIO;
 public class Image {
 
 	BufferedImage image;
+	File file;
 	String name;
 
 	public Image(File filename) throws IOException {
+		this.file = filename;
 		this.image = ImageIO.read(filename);
 		this.name = filename.getName();
 	}
@@ -53,6 +55,10 @@ public class Image {
 			for (double d : row)
 				sum += d;
 		return sum / elements;
+	}
+	
+	public File getFile() {
+		return this.file;
 	}
 	
 	public String getName() {
