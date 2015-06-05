@@ -39,6 +39,7 @@ public class ImageComparator {
 						right.getFile().delete();
 						imageList.remove(left);
 						i--;
+						break;
 					}
 				}
 //				System.out.println(this.window.getChoice());
