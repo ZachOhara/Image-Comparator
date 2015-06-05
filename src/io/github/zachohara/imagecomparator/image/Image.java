@@ -1,3 +1,20 @@
+/*
+ *  Copyright (C) 2015 Zach Ohara
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.zachohara.imagecomparator.image;
 
 import java.awt.image.BufferedImage;
@@ -21,7 +38,7 @@ public class Image {
 		this.file = filename;
 		this.image = ImageIO.read(filename);
 	}
-	
+
 	/**
 	 * Returns the percent difference between the pixels of this image and of another image.
 	 * @param other the {@code Image} object to compare with this object.
@@ -48,7 +65,7 @@ public class Image {
 		}
 		return getAverage(pixelDifferences);
 	}
-	
+
 	/**
 	 * Returns the color difference after scaling the pixel coordinates.
 	 * @param fromImage the image for coordinates to be scaled from.
@@ -65,14 +82,14 @@ public class Image {
 		int toColor = toImage.getRGB(toCol, toRow);
 		return Pixel.colorDifference(fromColor, toColor);
 	}
-	
+
 	/**
 	 * Deletes the file represented by this object.
 	 */
 	public void delete() {
 		this.file.delete();
 	}
-	
+
 	/**
 	 * Returns the name of the file. More specifically, return the last part of the fully-qualified
 	 * name of the file, after the final directory delimiter.
@@ -81,7 +98,7 @@ public class Image {
 	public String getName() {
 		return this.file.getName();
 	}
-	
+
 	/**
 	 * Returns a string representation of the size of this image.
 	 * @return a string representation of the size of this image.
@@ -89,7 +106,7 @@ public class Image {
 	public String getDimensionString() {
 		return this.image.getWidth() + "x" + this.image.getHeight();
 	}
-	
+
 	/**
 	 * Returns a {@code BufferedImage} object for this image.
 	 * @return the {@code BufferedImage} object for this image.
@@ -97,7 +114,7 @@ public class Image {
 	public BufferedImage getImage() {
 		return this.image;
 	}
-	
+
 	/**
 	 * Returns the mean of all values in {@code array} .
 	 * @param array the array to find the mean value of.
