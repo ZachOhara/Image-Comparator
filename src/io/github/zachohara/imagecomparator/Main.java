@@ -26,6 +26,7 @@ public class Main {
 		FileSelector filedialog = new FileSelector();
 		Window win = new Window();
 		ImageComparator comparator = new ImageComparator(filedialog.getFiles(), win);
+		//TODO exit on CancellationException
 		win.setVisible(true);
 		comparator.compareAll();
 		System.exit(0);

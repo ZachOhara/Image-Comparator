@@ -73,7 +73,7 @@ public class ImageComparator {
 			String name = f.getName();
 			boolean accepted = false;
 			for (String type : FileSelector.ACCEPTED_FILETYPES) {
-				if (name.endsWith("." + type)) {
+				if (name.toLowerCase().endsWith("." + type)) {
 					acceptedFiles.add(f);
 					accepted = true;
 				}
