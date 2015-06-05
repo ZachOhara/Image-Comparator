@@ -5,7 +5,6 @@ import io.github.zachohara.imagecomparator.image.Image;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -19,11 +18,28 @@ import javax.swing.JPanel;
 
 public class Window {
 
+	private boolean waiting;
+	private int result;
+
 	private JFrame window;
 	private ImagePanel leftPanel;
 	private ImagePanel rightPanel;
-	
+
+	private static final int[] DEFAULT_SIZE = {1000, 600};
+	private static final String WINDOW_TITLE = "Image Comparator by Zach Ohara";
+
 	private static final int BOTTOM_BUTTON_HEIGHT = 50;
+
+	public static final int OPERATION_FAILED = -1;
+	public static final int KEEP_LEFT = 1;
+	public static final int KEEP_RIGHT = 2;
+	public static final int KEEP_BOTH = 3;
+	public static final int KEEP_NONE = 4;
+
+	public static final String LEFT_LABEL = "left";
+	public static final String RIGHT_LABEL = "right";
+	public static final String KEEP_BOTH_LABEL = "Keep Both";
+	public static final String DELETE_BOTH_LABEL = "Delete Both";
 
 	public Window() {
 		this.initializeWinow();
@@ -33,30 +49,49 @@ public class Window {
 	public void setVisible(boolean visible) {
 		this.window.setVisible(visible);
 	}
-	
+
 	public void handleWindowResize() {
 		System.out.println("Resize! " + System.currentTimeMillis());
-		int newWidth = this.window.getSize().width;
-		this.leftPanel.resize(newWidth / 2);
-		this.rightPanel.resize(newWidth / 2);
-		this.window.repaint();
+		int newWidth = this.window.getWidth();
+		this.leftPanel.handleResize(newWidth / 2);
+		this.rightPanel.handleResize(newWidth / 2);
+		//		this.window.repaint();
 	}
-	
+
+	public int getChoice() {
+		this.result = 0;
+		this.waiting = true;
+		while (this.waiting);
+		return this.result;
+	}
+
 	public void handleButtonPress(String button) {
 		System.out.println(button);
-		//TODO: handle button presses
+		if (this.waiting) {
+			if (button == LEFT_LABEL)
+				this.result = KEEP_LEFT;
+			else if (button == RIGHT_LABEL)
+				this.result = KEEP_RIGHT;
+			else if (button == KEEP_BOTH_LABEL)
+				this.result = KEEP_BOTH;
+			else if (button == DELETE_BOTH_LABEL)
+				this.result = KEEP_NONE;
+
+			if (this.result != 0)
+				this.waiting = false;
+		}
 	}
-	
+
 	public void setImages(Image left, Image right) {
 		this.leftPanel.setImage(left);
 		this.rightPanel.setImage(right);
-//		this.window.repaint()
+		this.window.repaint();
 	}
 
 	private void initializeWinow() {
-		this.window = new JFrame("Image Comparator by Zach Ohara");
+		this.window = new JFrame(WINDOW_TITLE);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.window.setSize(1000, 600);
+		this.window.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
 		this.window.setResizable(true);
 		this.window.setLocationRelativeTo(null);
 		this.window.addComponentListener(new Listener.WindowResizeListener(this));
@@ -73,28 +108,31 @@ public class Window {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		JLabel text = new JLabel("Select an image to keep:");
-		text.setFont(new Font(text.getFont().getName(), Font.PLAIN, 25));
+		Font titleFont = new Font(text.getFont().getName(), Font.PLAIN, 25);
+		text.setFont(titleFont);
 		topPanel.add(text);
 		this.window.add("North", topPanel);
 	}
-	
+
 	private void formatSides() {
-		this.leftPanel = new ImagePanel(Color.GREEN);
-		this.rightPanel = new ImagePanel(Color.PINK);
+		this.leftPanel = new ImagePanel(this);
+		this.rightPanel = new ImagePanel(this);
+		this.leftPanel.addMouseListener(new Listener.MouseClickListener(this, LEFT_LABEL));
+		this.rightPanel.addMouseListener(new Listener.MouseClickListener(this, RIGHT_LABEL));
 		this.handleWindowResize();
 		this.window.add("West", this.leftPanel);
 		this.window.add("East", this.rightPanel);
 	}
-	
+
 	private void formatBottom() {
 		JPanel bottom = new JPanel();
 		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		this.formatButton(bottom, "Keep Both");
-		this.formatButton(bottom, "Delete Both");
+		this.formatButton(bottom, KEEP_BOTH_LABEL);
+		this.formatButton(bottom, DELETE_BOTH_LABEL);
 		this.window.add("South", bottom);
 	}
-	
+
 	private void formatButton(JPanel panel, String name) {
 		Button b = new Button(name);
 		b.setPreferredSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
@@ -102,11 +140,6 @@ public class Window {
 		panel.add(b);
 	}
 
-//	public static void main(String[] args) {
-//		Window w = new Window();
-//		w.setVisible(true);
-//	}
-	
 	public static void main(String[] args) throws IOException {
 		Window w = new Window();
 		w.setVisible(true);
