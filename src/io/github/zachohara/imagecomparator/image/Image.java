@@ -10,20 +10,30 @@ public class Image {
 
 	BufferedImage image;
 	File file;
-	String name;
 
+	/**
+	 * Creates an image from a given filename.
+	 * @param filename the file path of the image
+	 * @throws IOException if the given file doesn't exist, is not an image, or otherwise cannot
+	 * be loaded as a {@code BufferedImage}.
+	 */
 	public Image(File filename) throws IOException {
 		this.file = filename;
 		this.image = ImageIO.read(filename);
-		this.name = filename.getName();
 	}
 	
+	/**
+	 * Returns the percent difference between the pixels of this image and of another image.
+	 * @param other the {@code Image} object to compare with this object.
+	 * @return the average color difference between relative pixels of the two images.
+	 * @see io.github.zachohara.imagecomparator.image.pixel#colorDifference
+	 */
 	public double percentDifference(Image other) {
-		int thisSize = this.image.getHeight() * this.image.getWidth();
-		int otherSize = other.image.getHeight() * other.image.getWidth();
+		int thisArea = this.image.getHeight() * this.image.getWidth();
+		int otherArea = other.image.getHeight() * other.image.getWidth();
 		BufferedImage larger;
 		BufferedImage smaller;
-		if (thisSize <= otherSize) {
+		if (thisArea <= otherArea) {
 			larger = other.image;
 			smaller = this.image;
 		} else {
@@ -39,6 +49,14 @@ public class Image {
 		return getAverage(pixelDifferences);
 	}
 	
+	/**
+	 * Returns the color difference after scaling the pixel coordinates.
+	 * @param fromImage the image for coordinates to be scaled from.
+	 * @param toImage the image for coordinates to be scaled to.
+	 * @param fromRow the row of a pixel in {@code fromImage}.
+	 * @param fromCol the column of a pixel in {@code fromImage}.
+	 * @return the color difference between the relative pixels.
+	 */
 	private static double getPixelDifference(BufferedImage fromImage,
 			BufferedImage toImage, int fromRow, int fromCol) {
 		int toRow = (int) (((double) fromRow / fromImage.getHeight()) * toImage.getHeight());
@@ -48,6 +66,43 @@ public class Image {
 		return Pixel.colorDifference(fromColor, toColor);
 	}
 	
+	/**
+	 * Deletes the file represented by this object.
+	 */
+	public void delete() {
+		this.file.delete();
+	}
+	
+	/**
+	 * Returns the name of the file. More specifically, return the last part of the fully-qualified
+	 * name of the file, after the final directory delimiter.
+	 * @return the name of the file.
+	 */
+	public String getName() {
+		return this.file.getName();
+	}
+	
+	/**
+	 * Returns a string representation of the size of this image.
+	 * @return a string representation of the size of this image.
+	 */
+	public String getDimensionString() {
+		return this.image.getWidth() + "x" + this.image.getHeight();
+	}
+	
+	/**
+	 * Returns a {@code BufferedImage} object for this image.
+	 * @return the {@code BufferedImage} object for this image.
+	 */
+	public BufferedImage getImage() {
+		return this.image;
+	}
+	
+	/**
+	 * Returns the mean of all values in {@code array} .
+	 * @param array the array to find the mean value of.
+	 * @return the mean value of the array.
+	 */
 	private static double getAverage(double[][] array) {
 		double sum = 0;
 		double elements = array.length * array[0].length;
@@ -55,27 +110,6 @@ public class Image {
 			for (double d : row)
 				sum += d;
 		return sum / elements;
-	}
-	
-	public File getFile() {
-		return this.file;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public String getDimensionString() {
-		return this.image.getWidth() + "x" + this.image.getHeight();
-	}
-	
-	public BufferedImage getImage() {
-		return this.image;
-	}
-	
-	@Override
-	public String toString() {
-		return "\"" + this.name + "\"[" + this.getDimensionString() + "]";
 	}
 
 }

@@ -32,11 +32,11 @@ public class ImageComparator {
 					this.window.setImages(left, right);
 					int result = this.window.getChoice();
 					if (result == Window.KEEP_LEFT || result == Window.KEEP_NONE) {
-						right.getFile().delete();
+						right.delete();
 						imageList.remove(right);
 						j--;
 					} else if (result == Window.KEEP_RIGHT || result == Window.KEEP_NONE) {
-						right.getFile().delete();
+						right.delete();
 						imageList.remove(left);
 						i--;
 						break;
