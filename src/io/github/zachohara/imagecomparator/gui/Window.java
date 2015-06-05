@@ -21,6 +21,7 @@ import io.github.zachohara.imagecomparator.FileSelector;
 import io.github.zachohara.imagecomparator.image.Image;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -34,12 +35,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Window {
-
+public class Window extends JFrame {
+	
 	private boolean waiting;
 	private int result;
 
-	private JFrame window;
+	private JPanel contentPanel;
 	private ImagePanel leftPanel;
 	private ImagePanel rightPanel;
 
@@ -59,21 +60,19 @@ public class Window {
 	public static final String KEEP_BOTH_LABEL = "Keep Both";
 	public static final String DELETE_BOTH_LABEL = "Delete Both";
 
-	public Window() {
-		this.initializeWinow();
-		this.formatWindow();
-	}
+	private static final long serialVersionUID = 1L;
 
-	public void setVisible(boolean visible) {
-		this.window.setVisible(visible);
+	public Window() {
+		super(WINDOW_TITLE);
+		this.initializeWindow();
+		this.initializeContentPanel();
 	}
 
 	public void handleWindowResize() {
 //		System.out.println("Resize! " + System.currentTimeMillis());
-		int newWidth = this.window.getWidth();
+		int newWidth = this.contentPanel.getWidth();
 		this.leftPanel.handleResize(newWidth / 2);
 		this.rightPanel.handleResize(newWidth / 2);
-		//		this.window.repaint();
 	}
 
 	public int getChoice() {
@@ -114,20 +113,25 @@ public class Window {
 	public void setImages(Image left, Image right) {
 		this.leftPanel.setImage(left);
 		this.rightPanel.setImage(right);
-		this.window.repaint();
+		this.contentPanel.repaint();
+	}
+	
+	private void initializeWindow() {
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
+		this.setResizable(true);
+		this.setLocationRelativeTo(null);
+		this.addComponentListener(new Listener.WindowResizeListener(this));
 	}
 
-	private void initializeWinow() {
-		this.window = new JFrame(WINDOW_TITLE);
-		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.window.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
-		this.window.setResizable(true);
-		this.window.setLocationRelativeTo(null);
-		this.window.addComponentListener(new Listener.WindowResizeListener(this));
+	private void initializeContentPanel() {
+		this.contentPanel = new JPanel();
+		this.formatWindow();
+		this.add(this.contentPanel);
 	}
 
 	private void formatWindow() {
-		this.window.setLayout(new BorderLayout());
+		this.contentPanel.setLayout(new BorderLayout());
 		this.formatTitle();
 		this.formatSides();
 		this.formatBottom();
@@ -140,7 +144,7 @@ public class Window {
 		Font titleFont = new Font(text.getFont().getName(), Font.PLAIN, 25);
 		text.setFont(titleFont);
 		topPanel.add(text);
-		this.window.add("North", topPanel);
+		this.contentPanel.add("North", topPanel);
 	}
 
 	private void formatSides() {
@@ -149,39 +153,29 @@ public class Window {
 		this.leftPanel.addMouseListener(new Listener.MouseClickListener(this, LEFT_LABEL));
 		this.rightPanel.addMouseListener(new Listener.MouseClickListener(this, RIGHT_LABEL));
 		this.handleWindowResize();
-		this.window.add("West", this.leftPanel);
-		this.window.add("East", this.rightPanel);
+		this.contentPanel.add("West", this.leftPanel);
+		this.contentPanel.add("East", this.rightPanel);
 	}
-
-//	private void formatBottom() {
-//		JPanel bottom = new JPanel();
-//		bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
-//		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-//		this.formatButton(bottom, KEEP_BOTH_LABEL);
-//		bottom.add(Box.createVerticalStrut(20));
-//		this.formatButton(bottom, DELETE_BOTH_LABEL);
-//		this.window.add("South", bottom);
-//	}
 	
 	private void formatBottom() {
 		JPanel bottom = new JPanel();
-		bottom.setLayout(new GridLayout(2,0));
+		bottom.setBackground(Color.cyan);
+		bottom.setLayout(new GridLayout(1,2));
 		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		this.formatButton(bottom, KEEP_BOTH_LABEL);
-		bottom.add(Box.createVerticalStrut(20));
 		this.formatButton(bottom, DELETE_BOTH_LABEL);
-		this.window.add("South", bottom);
+		this.formatButton(bottom, "Test");
+		this.contentPanel.add("South", bottom);
 	}
 
 	private void formatButton(JPanel panel, String name) {
 		JButton b = new JButton(name);
 		b.setPreferredSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
 		b.setSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
-//		b.setMaximumSize(b.getSize());
+		b.setMinimumSize(b.getSize());
 		b.addActionListener(new Listener.ButtonListener(this, name));
 		b.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		b.setAlignmentY(JButton.CENTER_ALIGNMENT);
-//		b.setVisible(true);
 		panel.add(b);
 	}
 

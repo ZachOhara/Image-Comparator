@@ -42,7 +42,6 @@ public class ImagePanel extends JPanel {
 	private JComponent componentImage;
 //	private Component rigidArea;
 
-
 	private static final int FONT_SIZE = 17;
 	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, FONT_SIZE);
 
