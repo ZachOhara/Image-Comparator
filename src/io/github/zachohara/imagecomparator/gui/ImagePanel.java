@@ -3,76 +3,65 @@ package io.github.zachohara.imagecomparator.gui;
 import io.github.zachohara.imagecomparator.image.Image;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
-	
+
+	//private int width;
+
 	private JPanel infoPanel;
 	private JLabel filename;
 	private JLabel dimension;
+	private Image image;
 	private JComponent componentImage;
-	private Component rigidArea;
-	
-	
+//	private Component rigidArea;
+
+
 	private static final int FONT_SIZE = 17;
 	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, FONT_SIZE);
-	
+
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 * 
-		this.leftPanel = new JPanel();
-		this.rightPanel = new JPanel();
-		this.handleWindowResize();
-		this.leftPanel.setLayout(new BorderLayout());
-		this.rightPanel.setLayout(new BorderLayout());
-		this.leftPanel.setBackground(Color.BLUE);
-		this.rightPanel.setBackground(Color.RED);
-		this.window.add("West", this.leftPanel);
-		this.window.add("East", this.rightPanel);
-	 */
-	
-	public ImagePanel() {
+	public ImagePanel(Window owner) {
 		super();
 		this.setLayout(new BorderLayout());
 		this.formatInfoPanel();
 	}
-	
-	public ImagePanel(Color c) {
-		this();
-		JPanel p = new JPanel();
-		p.setBackground(c);
-		this.add(p);
-		this.repaint();
-	}
-	
+
 	public void setImage(Image i) {
-		this.componentImage = getComponent(i.getImage());
+//		if (this.componentImage != null)
+//			this.remove(this.componentImage);
+		this.image = i;
+		JComponent newImage = getScaledImage(i.getImage());
 		this.filename.setText(i.getName());
 		this.dimension.setText(i.getDimensionString());
-		this.add(this.componentImage);
-		//this.repaint();
+		newImage.setAlignmentX(CENTER_ALIGNMENT);
+		newImage.setAlignmentY(CENTER_ALIGNMENT);
+		this.add(newImage);
+		if (this.componentImage != null)
+			this.remove(this.componentImage);
+		this.componentImage = newImage;
 	}
-	
-	public void resize(int width) {
-		if (this.rigidArea != null)
-			this.remove(this.rigidArea);
-		this.rigidArea = Box.createHorizontalStrut(width);
-		this.add(this.rigidArea);
-		this.repaint();
+
+	public void handleResize(int width) {
+//		if (this.rigidArea != null)
+//			this.remove(this.rigidArea);
+//		this.rigidArea = Box.createHorizontalStrut(width);
+		this.setPreferredSize(new Dimension(width, this.getHeight()));
+//		this.add(this.rigidArea);
+		if (this.image != null)
+			this.setImage(this.image);
 	}
-	
+
 	private void formatInfoPanel() {
 		this.infoPanel = new JPanel();
 		this.infoPanel.setLayout(new BoxLayout(this.infoPanel, BoxLayout.Y_AXIS));
@@ -82,25 +71,33 @@ public class ImagePanel extends JPanel {
 		this.formatInfoText(this.dimension);
 		this.add("North", this.infoPanel);
 	}
-	
+
 	private void formatInfoText(JLabel panel) {
 		panel.setFont(INFO_FONT);
 		panel.setAlignmentX(CENTER_ALIGNMENT);
 		this.infoPanel.add(panel);
 	}
-	
-	public static JComponent getComponent(BufferedImage bi) {
-		return new JLabel(new ImageIcon(bi));
+
+	private JComponent getScaledImage(BufferedImage b) {
+		double height = b.getHeight();
+		double width = b.getWidth();
+		double scale = Math.max(height / (this.getHeight() - this.infoPanel.getHeight()),
+				width / this.getWidth());
+		if (scale > 1) {
+			height /= scale;
+			width /= scale;
+		}
+		return new JLabel(new ImageIcon(scale(b, (int) width, (int) height)));
 	}
 
-	public static void main(String[] args) {
-		JFrame win = new JFrame();
-		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		win.setSize(500, 500);
-		win.setLocationRelativeTo(null);
-		ImagePanel p = new ImagePanel();
-		win.add(p);
-		win.setVisible(true);
+	private static BufferedImage scale(BufferedImage b, int newW, int newH) {
+		int oldW = b.getWidth();
+		int oldH = b.getHeight();
+		BufferedImage db = new BufferedImage(newW, newH, b.getType());
+		Graphics2D g = db.createGraphics();
+		g.drawImage(b, 0, 0, newW, newH, 0, 0, oldW, oldH, null);
+		g.dispose();
+		return db;
 	}
 
 }
