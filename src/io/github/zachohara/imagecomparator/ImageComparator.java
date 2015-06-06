@@ -34,12 +34,23 @@ public class ImageComparator {
 	
 	private static final double COMPARISON_THRESHHOLD = 0.15;
 
-	public ImageComparator(File[] fileArr, Window w) {
-		this.window = w;
-		List<File> fileList = this.generateFileList(fileArr);
+	/**
+	 * Constructs a new {@code ImageComparator} that will compare the given files with the
+	 * given window.
+	 * @param fileList the list of files to be checked.
+	 * @param win the window to display the images in.
+	 */
+	public ImageComparator(File[] fileList, Window win) {
+		this.window = win;
+		win.setLoadingText("Loading...");
+		win.setIsLoading(true);
 		this.populateImageList(fileList);
 	}
 
+	/**
+	 * Iterates through all images and compares them. Can be thought of as a 'main' method
+	 * for this class.
+	 */
 	public void compareAll() {
 		for (int i = 0; i < imageList.size(); i++) {
 			for (int j = i + 1; j < imageList.size(); j++) {
@@ -59,50 +70,51 @@ public class ImageComparator {
 						break;
 					}
 				}
-//				System.out.println(this.window.getChoice());
-//				System.out.println("Comparing " + imageList.get(i) + " and " + imageList.get(j));
-//				System.out.println(imageList.get(i).percentDifference(imageList.get(j)) + ", "
-//						+ imageList.get(j).percentDifference(imageList.get(i)));
 			}
 		}
 	}
-
-	private List<File> generateFileList(File[] filelist) {
-		List<File> acceptedFiles = new ArrayList<File>();
-		for (File f : filelist) {
+	
+	/**
+	 * Constructs and populates a list of {@code Image} objects from an array of {@code File}
+	 * objects.
+	 * @param files the array of {@code File}s to use
+	 */
+	private void populateImageList(File[] files) {
+		this.imageList = new ArrayList<Image>();
+		for (File f : files) {
 			String name = f.getName();
 			boolean accepted = false;
-			for (String type : FileSelector.ACCEPTED_FILETYPES) {
-				if (name.toLowerCase().endsWith("." + type)) {
-					acceptedFiles.add(f);
+			for (String acceptableType : FileSelector.ACCEPTED_FILETYPES) {
+				if (name.toLowerCase().endsWith("." + acceptableType)) {
 					accepted = true;
+					break;
 				}
 			}
-			if (!accepted) {
+			if (accepted) {
+				try {
+					this.imageList.add(new Image(f));
+				} catch (IOException e) {
+					warnLoadError(name);
+				}
+			} else
 				warnInvalidType(name);
-			}
-		}
-		System.out.println(acceptedFiles);
-		return acceptedFiles;
-	}
-
-	private void populateImageList(List<File> fileList) {
-		this.imageList = new ArrayList<Image>();
-		for (int i = 0; i < fileList.size(); i++) {
-			try {
-				this.imageList.add(new Image(fileList.get(i)));
-			} catch (IOException e) {
-				e.printStackTrace();
-				warnLoadError(fileList.get(i).getName());
-			}
+					
 		}
 	}
 
+	/**
+	 * Warns the user that a selected file is not a real image file.
+	 * @param filename the name of the invalid file.
+	 */
 	private static void warnInvalidType(String filename) {
 		JOptionPane.showMessageDialog(null, filename + " is not an image, and will not be loaded.",
 				"Warning", JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Warns the user that a selected file could not be loaded for an unknown reason.
+	 * @param filename the name of the unloadable file.
+	 */
 	private static void warnLoadError(String filename) {
 		JOptionPane.showMessageDialog(null, "An error occured while trying to open " + filename +".",
 				"Error", JOptionPane.ERROR_MESSAGE);
