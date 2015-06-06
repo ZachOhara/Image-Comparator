@@ -29,7 +29,6 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,8 +36,8 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame {
 	
-	private boolean waiting;
-	private int result;
+	private volatile boolean waitingForSelection;
+	private int selection;
 
 	private JPanel contentPanel;
 	private ImagePanel leftPanel;
@@ -69,16 +68,15 @@ public class Window extends JFrame {
 	}
 
 	public void handleWindowResize() {
-//		System.out.println("Resize! " + System.currentTimeMillis());
-		int newWidth = this.contentPanel.getWidth();
+		int newWidth = this.getWidth();
 		this.leftPanel.handleResize(newWidth / 2);
 		this.rightPanel.handleResize(newWidth / 2);
 	}
 
 	public int getChoice() {
-		this.result = 0;
-		this.waiting = true;
-		while (this.isWaiting()) {
+		this.selection = 0;
+		this.waitingForSelection = true;
+		while (this.waitingForSelection) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -86,27 +84,30 @@ public class Window extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		return this.result;
+		return this.selection;
 	}
 	
-	private synchronized boolean isWaiting() {
-		return this.waiting;
+	public void setLoadingText(String text) {
+		//TODO
+	}
+	
+	public void setIsLoading(boolean loading) {
+		//TODO
 	}
 
 	public void handleButtonPress(String button) {
-//		System.out.println(button);
-		if (this.isWaiting()) {
+		if (this.waitingForSelection) {
 			if (button == LEFT_LABEL)
-				this.result = KEEP_LEFT;
+				this.selection = KEEP_LEFT;
 			else if (button == RIGHT_LABEL)
-				this.result = KEEP_RIGHT;
+				this.selection = KEEP_RIGHT;
 			else if (button == KEEP_BOTH_LABEL)
-				this.result = KEEP_BOTH;
+				this.selection = KEEP_BOTH;
 			else if (button == DELETE_BOTH_LABEL)
-				this.result = KEEP_NONE;
+				this.selection = KEEP_NONE;
 
-			if (this.result != 0)
-				this.waiting = false;
+			if (this.selection != 0)
+				this.waitingForSelection = false;
 		}
 	}
 
@@ -160,11 +161,10 @@ public class Window extends JFrame {
 	private void formatBottom() {
 		JPanel bottom = new JPanel();
 		bottom.setBackground(Color.cyan);
-		bottom.setLayout(new GridLayout(1,2));
+		bottom.setLayout(new GridLayout(0,1));
 		bottom.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		this.formatButton(bottom, KEEP_BOTH_LABEL);
 		this.formatButton(bottom, DELETE_BOTH_LABEL);
-		this.formatButton(bottom, "Test");
 		this.contentPanel.add("South", bottom);
 	}
 
