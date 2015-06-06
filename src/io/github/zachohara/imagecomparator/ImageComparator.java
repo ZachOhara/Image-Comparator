@@ -42,8 +42,7 @@ public class ImageComparator {
 	 */
 	public ImageComparator(File[] fileList, Window win) {
 		this.window = win;
-		win.setLoadingText("Loading...");
-		win.setIsLoading(true);
+		this.window.setIsLoading(true);
 		this.populateImageList(fileList);
 	}
 
@@ -58,12 +57,12 @@ public class ImageComparator {
 				Image right = this.imageList.get(j);
 				if (left.percentDifference(right) < COMPARISON_THRESHHOLD) {
 					this.window.setImages(left, right);
-					int result = this.window.getChoice();
-					if (result == Window.KEEP_LEFT || result == Window.KEEP_NONE) {
+					String result = this.window.getChoice();
+					if (result.equals(Window.KEEP_LEFT_LABEL) || result == Window.DELETE_BOTH_LABEL) {
 						right.delete();
 						imageList.remove(right);
 						j--;
-					} else if (result == Window.KEEP_RIGHT || result == Window.KEEP_NONE) {
+					} else if (result.equalsIgnoreCase(Window.KEEP_RIGHT_LABEL) || result.equals(Window.DELETE_BOTH_LABEL)) {
 						right.delete();
 						imageList.remove(left);
 						i--;

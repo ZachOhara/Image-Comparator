@@ -36,8 +36,10 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame {
 	
-	private volatile boolean waitingForSelection;
-	private int selection;
+	private volatile boolean isWaitingForSelection;
+	private String selection;
+	
+	private JLabel loadingText;
 
 	private JPanel contentPanel;
 	private ImagePanel leftPanel;
@@ -47,15 +49,12 @@ public class Window extends JFrame {
 	private static final String WINDOW_TITLE = "Image Comparator by Zach Ohara";
 
 	private static final int BOTTOM_BUTTON_HEIGHT = 50;
+	
+	private static final int LOADING_TEXT_SIZE = 20;
+	private static final String DEFAULT_LOADING_TEXT = "Loading...";
 
-	public static final int OPERATION_FAILED = -1;
-	public static final int KEEP_LEFT = 1;
-	public static final int KEEP_RIGHT = 2;
-	public static final int KEEP_BOTH = 3;
-	public static final int KEEP_NONE = 4;
-
-	public static final String LEFT_LABEL = "left";
-	public static final String RIGHT_LABEL = "right";
+	public static final String KEEP_LEFT_LABEL = "Keep Left";
+	public static final String KEEP_RIGHT_LABEL = "Keep Right";
 	public static final String KEEP_BOTH_LABEL = "Keep Both";
 	public static final String DELETE_BOTH_LABEL = "Delete Both";
 
@@ -65,6 +64,8 @@ public class Window extends JFrame {
 		super(WINDOW_TITLE);
 		this.initializeWindow();
 		this.initializeContentPanel();
+		this.initializeLoadingScreen();
+		this.setIsLoading(true);
 	}
 
 	public void handleWindowResize() {
@@ -73,41 +74,35 @@ public class Window extends JFrame {
 		this.rightPanel.handleResize(newWidth / 2);
 	}
 
-	public int getChoice() {
-		this.selection = 0;
-		this.waitingForSelection = true;
-		while (this.waitingForSelection) {
+	public String getChoice() {
+		this.selection = "";
+		this.isWaitingForSelection = true;
+		while (this.isWaitingForSelection) {
 			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				Thread.sleep(100); //TODO try different values for this
+			} catch (InterruptedException ignore) {}
 		}
 		return this.selection;
 	}
 	
 	public void setLoadingText(String text) {
-		//TODO
+		this.loadingText.setText(text);
 	}
 	
 	public void setIsLoading(boolean loading) {
-		//TODO
+		if (loading) {
+			this.remove(this.contentPanel);
+			this.add(loadingText);
+		} else {
+			this.remove(loadingText);
+			this.add(this.contentPanel);
+		}
 	}
 
 	public void handleButtonPress(String button) {
-		if (this.waitingForSelection) {
-			if (button == LEFT_LABEL)
-				this.selection = KEEP_LEFT;
-			else if (button == RIGHT_LABEL)
-				this.selection = KEEP_RIGHT;
-			else if (button == KEEP_BOTH_LABEL)
-				this.selection = KEEP_BOTH;
-			else if (button == DELETE_BOTH_LABEL)
-				this.selection = KEEP_NONE;
-
-			if (this.selection != 0)
-				this.waitingForSelection = false;
+		if (this.isWaitingForSelection) {
+			this.selection = button;
+			this.isWaitingForSelection = false;
 		}
 	}
 
@@ -151,8 +146,8 @@ public class Window extends JFrame {
 	private void formatSides() {
 		this.leftPanel = new ImagePanel(this);
 		this.rightPanel = new ImagePanel(this);
-		this.leftPanel.addMouseListener(new Listener.MouseClickListener(this, LEFT_LABEL));
-		this.rightPanel.addMouseListener(new Listener.MouseClickListener(this, RIGHT_LABEL));
+		this.leftPanel.addMouseListener(new Listener.MouseClickListener(this, KEEP_LEFT_LABEL));
+		this.rightPanel.addMouseListener(new Listener.MouseClickListener(this, KEEP_RIGHT_LABEL));
 		this.handleWindowResize();
 		this.contentPanel.add("West", this.leftPanel);
 		this.contentPanel.add("East", this.rightPanel);
@@ -177,6 +172,13 @@ public class Window extends JFrame {
 		b.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		b.setAlignmentY(JButton.CENTER_ALIGNMENT);
 		panel.add(b);
+	}
+	
+	private void initializeLoadingScreen() {
+		this.loadingText = new JLabel(DEFAULT_LOADING_TEXT);
+		this.loadingText.setFont(new Font("Loading font", Font.PLAIN, LOADING_TEXT_SIZE));
+		this.loadingText.setAlignmentX(CENTER_ALIGNMENT);
+		this.loadingText.setAlignmentY(CENTER_ALIGNMENT);
 	}
 
 	public static void main(String[] args) throws IOException {
