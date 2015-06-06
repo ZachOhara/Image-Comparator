@@ -31,7 +31,6 @@ public class Main {
 	public static void main(String[] args) {
 		FileSelector filedialog = new FileSelector();
 		Window win = new Window();
-		win.setVisible(true);
 		ImageComparator comparator = null;
 		try {
 			comparator = new ImageComparator(filedialog.getFiles(), win);

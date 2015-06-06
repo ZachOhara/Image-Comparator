@@ -26,10 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 public class ImageComparator {
 
-	public Window window;
+	private Window window;
+	private JProgressBar progressBar;
 	private List<Image> imageList;
 	
 	private static final double COMPARISON_THRESHHOLD = 0.15;
@@ -42,7 +44,7 @@ public class ImageComparator {
 	 */
 	public ImageComparator(File[] fileList, Window win) {
 		this.window = win;
-		this.window.setIsLoading(true);
+		this.progressBar = this.window.getLoadingProgressBar();
 		this.populateImageList(fileList);
 	}
 
@@ -51,6 +53,10 @@ public class ImageComparator {
 	 * for this class.
 	 */
 	public void compareAll() {
+		this.window.setLoadingText("Looking for matches...");
+		this.window.setIsLoading(true);
+		this.progressBar.setMaximum(sumOfN(this.imageList.size()));
+		this.progressBar.setValue(0);
 		for (int i = 0; i < imageList.size(); i++) {
 			for (int j = i + 1; j < imageList.size(); j++) {
 				Image left = this.imageList.get(i);
@@ -66,10 +72,15 @@ public class ImageComparator {
 						right.delete();
 						imageList.remove(left);
 						i--;
+						this.incrementProgressBar(imageList.size() - j - 1);
+						this.window.setIsLoading(true);
 						break;
 					}
+					this.window.setIsLoading(true);
 				}
+				this.incrementProgressBar(1);
 			}
+			this.window.setIsLoading(true);
 		}
 	}
 	
@@ -79,6 +90,10 @@ public class ImageComparator {
 	 * @param files the array of {@code File}s to use
 	 */
 	private void populateImageList(File[] files) {
+		this.window.setLoadingText("Loading images...");
+		this.progressBar.setMaximum(files.length);
+		this.progressBar.setValue(0);
+		this.window.setVisible(true);
 		this.imageList = new ArrayList<Image>();
 		for (File f : files) {
 			String name = f.getName();
@@ -97,7 +112,7 @@ public class ImageComparator {
 				}
 			} else
 				warnInvalidType(name);
-					
+			this.incrementProgressBar(1);
 		}
 	}
 
@@ -117,6 +132,26 @@ public class ImageComparator {
 	private static void warnLoadError(String filename) {
 		JOptionPane.showMessageDialog(null, "An error occured while trying to open " + filename +".",
 				"Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Increments the progress bar by n.
+	 * @param n the increment of the progress bar
+	 */
+	private void incrementProgressBar(int n) {
+		this.progressBar.setValue(this.progressBar.getValue() + 1);
+	}
+	
+	/**
+	 * Returns the sum of the nth consecutive integers
+	 * @param n the integer to be summed
+	 * @return the sum of the nth consecutive integers
+	 */
+	private static int sumOfN(int n) {
+		int sum = 0;
+		for (int i = 1; i <= n; i++)
+			sum += i;
+		return sum;
 	}
 
 }

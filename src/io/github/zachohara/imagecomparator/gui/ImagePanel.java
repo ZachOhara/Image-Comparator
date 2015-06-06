@@ -53,7 +53,7 @@ public class ImagePanel extends JPanel {
 		this.formatInfoPanel();
 	}
 
-	public void setImage(Image i) {
+	public synchronized void setImage(Image i) {
 //		if (this.componentImage != null)
 //			this.remove(this.componentImage);
 		this.image = i;
@@ -68,7 +68,7 @@ public class ImagePanel extends JPanel {
 		this.componentImage = newImage;
 	}
 
-	public void handleResize(int width) {
+	public synchronized void handleResize(int width) {
 //		if (this.rigidArea != null)
 //			this.remove(this.rigidArea);
 //		this.rigidArea = Box.createHorizontalStrut(width);
@@ -103,7 +103,7 @@ public class ImagePanel extends JPanel {
 			height /= scale;
 			width /= scale;
 		}
-		return new JLabel(new ImageIcon(scale(b, (int) width, (int) height)));
+		return new JLabel(new ImageIcon(scale(b, (int) width - 5, (int) height - 5)));
 	}
 
 	private static BufferedImage scale(BufferedImage b, int newW, int newH) {
