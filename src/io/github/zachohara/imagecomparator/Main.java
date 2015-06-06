@@ -17,17 +17,27 @@
 
 package io.github.zachohara.imagecomparator;
 
+import java.util.concurrent.CancellationException;
+
 import io.github.zachohara.imagecomparator.gui.Window;
 
 
 public class Main {
 
+	/**
+	 * The main launcher method for the whole program.
+	 * @param args command line arguments.
+	 */
 	public static void main(String[] args) {
 		FileSelector filedialog = new FileSelector();
 		Window win = new Window();
-		ImageComparator comparator = new ImageComparator(filedialog.getFiles(), win);
-		//TODO exit on CancellationException
 		win.setVisible(true);
+		ImageComparator comparator = null;
+		try {
+			comparator = new ImageComparator(filedialog.getFiles(), win);
+		} catch (CancellationException e) {
+			System.exit(1);
+		}
 		comparator.compareAll();
 		System.exit(0);
 	}
