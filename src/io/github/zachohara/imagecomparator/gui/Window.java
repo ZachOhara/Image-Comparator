@@ -27,7 +27,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -67,7 +66,6 @@ public class Window extends JFrame {
 	public Window() {
 		super(WINDOW_TITLE);
 		this.initializeAll();
-//		this.setIsLoading(true);
 	}
 
 	public void handleWindowResize() {
@@ -81,7 +79,7 @@ public class Window extends JFrame {
 		this.isWaitingForSelection = true;
 		while (this.isWaitingForSelection) {
 			try {
-				Thread.sleep(100); //TODO try different values for this
+				Thread.sleep(10);
 			} catch (InterruptedException ignore) {}
 		}
 		return this.selection;

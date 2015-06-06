@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
 
-	//private int width;
+	// TODO CLEAN THIS CLASS
 
 	private JPanel infoPanel;
 	private JLabel filename;

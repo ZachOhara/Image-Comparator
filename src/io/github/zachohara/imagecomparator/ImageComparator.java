@@ -33,7 +33,7 @@ public class ImageComparator {
 	private Window window;
 	private JProgressBar progressBar;
 	private List<Image> imageList;
-	
+
 	private static final double COMPARISON_THRESHHOLD = 0.15;
 
 	/**
@@ -83,7 +83,7 @@ public class ImageComparator {
 			this.window.setIsLoading(true);
 		}
 	}
-	
+
 	/**
 	 * Constructs and populates a list of {@code Image} objects from an array of {@code File}
 	 * objects.
@@ -93,6 +93,7 @@ public class ImageComparator {
 		this.window.setLoadingText("Loading images...");
 		this.progressBar.setMaximum(files.length);
 		this.progressBar.setValue(0);
+		this.window.setIsLoading(true);
 		this.window.setVisible(true);
 		this.imageList = new ArrayList<Image>();
 		for (File f : files) {
@@ -133,7 +134,7 @@ public class ImageComparator {
 		JOptionPane.showMessageDialog(null, "An error occured while trying to open " + filename +".",
 				"Error", JOptionPane.ERROR_MESSAGE);
 	}
-	
+
 	/**
 	 * Increments the progress bar by n.
 	 * @param n the increment of the progress bar
@@ -141,7 +142,7 @@ public class ImageComparator {
 	private void incrementProgressBar(int n) {
 		this.progressBar.setValue(this.progressBar.getValue() + 1);
 	}
-	
+
 	/**
 	 * Returns the sum of the nth consecutive integers
 	 * @param n the integer to be summed

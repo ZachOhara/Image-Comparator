@@ -18,7 +18,7 @@
 package io.github.zachohara.imagecomparator.image;
 
 public abstract class Pixel {
-	
+
 	/**
 	 * Compares two 8-bit RGB color integers and finds the difference between them. The returned
 	 * value is a decimal between zero and one that represents the percent of difference in
@@ -42,7 +42,7 @@ public abstract class Pixel {
 				+ Math.abs(getBlue(color1) - getBlue(color2));
 		return difference / (255 * 3);
 	}
-	
+
 	/**
 	 * Extracts the red componenet from the given RGB color integer.
 	 * @param color the RGB integer to extract from.

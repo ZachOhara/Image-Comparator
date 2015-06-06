@@ -29,15 +29,26 @@ public abstract class Listener {
 	private Window owner;
 	private String buttonName;
 
+	/**
+	 * Constructs a listener with the given owner and button.
+	 * @param win the window that all information should be returned to.
+	 * @param button the label of the button that this is registered to.
+	 */
 	public Listener(Window win, String button) {
 		this.owner = win;
 		this.buttonName = button;
 	}
 
+	/**
+	 * Notifies the owner of this listener that the registered button has been pressed.
+	 */
 	public void notifyOwner() {
 		this.owner.handleButtonPress(buttonName);
 	}
 
+	/**
+	 * A listener that listens for the user resizing a window.
+	 */
 	public static class WindowResizeListener extends ComponentAdapter {
 
 		private Window owner;
@@ -52,6 +63,9 @@ public abstract class Listener {
 
 	}
 
+	/**
+	 * A listener that listens for when a button is clicked on.
+	 */
 	public static class ButtonListener extends Listener implements ActionListener {
 
 		public ButtonListener(Window win, String button) {
@@ -65,6 +79,9 @@ public abstract class Listener {
 
 	}
 
+	/**
+	 * A listener that listens for the user clicking on a panel or frame with the mouse.
+	 */
 	public static class MouseClickListener extends Listener implements MouseListener {
 
 		public MouseClickListener(Window win, String button) {
