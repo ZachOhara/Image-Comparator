@@ -24,41 +24,32 @@ import java.util.concurrent.CancellationException;
 import javax.swing.JFrame;
 
 public class FileSelector {
-	
-	private JFrame window;
-	private FileDialog fileChooserAWT;
-//	private JFileChooser fileChooserSwing;
-	
-	public static final String[] ACCEPTED_FILETYPES = {"png", "jpeg", "jpg", "gif"};
-	
-	public static final String SUPER_DIRECTORY = "C:/";
-	public static final String WINDOW_TITLE = "Select files to compare";
-	
-	private static final boolean LOAD_WITH_AWT = true;
 
+	private JFrame window;
+	private FileDialog dialog;
+
+	public static final String[] ACCEPTED_FILETYPES = {"png", "jpeg", "jpg", "gif"};
+	public static final String WINDOW_TITLE = "Select files to compare";
+
+	/**
+	 * Constructs a new {@code FileSelector}.
+	 */
 	public FileSelector() {
 		this.window = new JFrame(WINDOW_TITLE);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		if (LOAD_WITH_AWT) {
-			this.fileChooserAWT = new FileDialog(this.window, WINDOW_TITLE);
-			this.fileChooserAWT.setMode(FileDialog.LOAD);
-			this.fileChooserAWT.setDirectory(SUPER_DIRECTORY);
-			this.fileChooserAWT.setMultipleMode(true);
-		} else {
-			throw new UnsupportedOperationException("Cannot load using swing");
-		}
+		this.dialog = new FileDialog(this.window, WINDOW_TITLE);
+		this.dialog.setMode(FileDialog.LOAD);
+		this.dialog.setMultipleMode(true);
 	}
-	
+
+	/**
+	 * Prompts the user to select files to compare, and returns the unfiltered selection.
+	 * @return the files selected by the user.
+	 * @throws {@code CancellationException} if the user closed the selection dialog.
+	 */
 	public File[] getFiles() throws CancellationException {
-		if (LOAD_WITH_AWT)
-			return this.getFilesAWT();
-		else
-			throw new UnsupportedOperationException("Cannot load using swing");
-	}
-	
-	private File[] getFilesAWT() throws CancellationException {
-		this.fileChooserAWT.setVisible(true);
-		File[] selected = this.fileChooserAWT.getFiles();
+		this.dialog.setVisible(true);
+		File[] selected = this.dialog.getFiles();
 		if (selected.length != 0)
 			return selected;
 		throw new CancellationException();
