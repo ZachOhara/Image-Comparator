@@ -20,11 +20,9 @@ package io.github.zachohara.imagecomparator.gui;
 import io.github.zachohara.imagecomparator.FileSelector;
 import io.github.zachohara.imagecomparator.image.Image;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
@@ -43,10 +41,14 @@ public class Window extends JFrame {
 	
 	private JLabel loadingText;
 	private JPanel loadingPanel;
+	private JLabel titleText;
+	private JPanel titlePanel;
 	private JProgressBar loadingProgress;
 	private JPanel contentPanel;
 	private ImagePanel leftPanel;
 	private ImagePanel rightPanel;
+	private JButton keepBothButton;
+	private JButton deleteBothButton;
 
 	private static final int[] DEFAULT_SIZE = {1000, 600};
 	private static final String DEFAULT_LOADING_TEXT = "Loading...";
@@ -55,6 +57,8 @@ public class Window extends JFrame {
 	private static final int BOTTOM_BUTTON_HEIGHT = 50;
 	private static final int LOADING_TEXT_SIZE = 20;
 	private static final int TITLE_TEXT_SIZE = 25;
+	private static final int TOP_PANEL_HEIGHT = 40;
+	private static final int BOTTOM_CUTOFF_CORRECTION = 38;
 
 	public static final String KEEP_LEFT_LABEL = "Keep Left";
 	public static final String KEEP_RIGHT_LABEL = "Keep Right";
@@ -69,6 +73,11 @@ public class Window extends JFrame {
 	}
 
 	public void handleWindowResize() {
+		this.resizeContentPanel();
+		this.resizeTitle();
+		this.resizeBottom();
+		this.resizeBothSides();
+		
 		int newWidth = this.getWidth();
 		this.leftPanel.handleResize(newWidth / 2);
 		this.rightPanel.handleResize(newWidth / 2);
@@ -129,8 +138,24 @@ public class Window extends JFrame {
 	}
 	
 	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Weird window init stuff below:
 	 * ==============================
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private void initializeAll() {
@@ -142,7 +167,7 @@ public class Window extends JFrame {
 	private void initializeFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
-		//this.setLayout(new FlowLayout());
+		this.setLayout(null);
 		this.setResizable(true);
 		this.setLocationRelativeTo(null);
 		this.addComponentListener(new Listener.WindowResizeListener(this));
@@ -150,26 +175,38 @@ public class Window extends JFrame {
 
 	private void initializeContentPanel() {
 		this.contentPanel = new JPanel();
-		this.contentPanel.setLayout(new BorderLayout());
+		this.contentPanel.setLayout(null);
+		this.contentPanel.setLocation(0, 0);
+		this.resizeContentPanel();
 		this.formatTitle();
 		this.formatSides();
 		this.formatBottom();
 		this.add(this.contentPanel);
 	}
+	
+	private void resizeContentPanel() {
+		this.contentPanel.setSize(this.getSize());
+	}
 
 	private void formatTitle() {
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		JLabel text = new JLabel(TITLE_INSTRUCTION_TEXT);
-		text.setFont(getFontOfSize(TITLE_TEXT_SIZE));
-		topPanel.add(text);
-		this.contentPanel.add("North", topPanel);
+		this.titlePanel = new JPanel();
+		this.titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		this.titleText = new JLabel(TITLE_INSTRUCTION_TEXT);
+		this.titleText.setFont(getFontOfSize(TITLE_TEXT_SIZE));
+		this.titleText.setLocation(0, 0);
+		this.resizeTitle();
+		this.titlePanel.add(this.titleText);
+		this.contentPanel.add(this.titlePanel);
+	}
+	
+	private void resizeTitle() {
+		this.titlePanel.setSize(this.getWidth(), TOP_PANEL_HEIGHT);
 	}
 
 	private void formatSides() {
 		this.leftPanel = this.formatImagePanel(KEEP_LEFT_LABEL, "West");
 		this.rightPanel = this.formatImagePanel(KEEP_RIGHT_LABEL, "East");
-		this.handleWindowResize();
+		this.resizeBothSides();
 	}
 	
 	private ImagePanel formatImagePanel(String label, String side) {
@@ -179,19 +216,40 @@ public class Window extends JFrame {
 		return p;
 	}
 	
+	private void resizeBothSides() {
+		this.resizeSide(this.leftPanel);
+		this.resizeSide(this.rightPanel);
+		this.leftPanel.setLocation(0, this.titlePanel.getHeight());
+		this.rightPanel.setLocation(this.getWidth() / 2, this.titlePanel.getHeight());
+	}
+	
+	private void resizeSide(ImagePanel p) {
+		p.setSize(this.getWidth() / 2,
+				this.getHeight() - this.titlePanel.getHeight() - (2 * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
+		p.handleResize();
+	}
+	
 	private void formatBottom() {
-		JPanel bottom = new JPanel();
-		bottom.setLayout(new GridLayout(0,1));
-		this.formatBottomButton(bottom, KEEP_BOTH_LABEL);
-		this.formatBottomButton(bottom, DELETE_BOTH_LABEL);
-		this.contentPanel.add("South", bottom);
+		this.keepBothButton = this.formatBottomButton(KEEP_BOTH_LABEL);
+		this.deleteBothButton = this.formatBottomButton(DELETE_BOTH_LABEL);
+		this.resizeBottom();
 	}
 
-	private void formatBottomButton(JPanel panel, String name) {
+	private JButton formatBottomButton(String name) {
 		JButton b = new JButton(name);
-		b.setPreferredSize(new Dimension(0, BOTTOM_BUTTON_HEIGHT));
 		b.addActionListener(new Listener.ButtonListener(this, name));
-		panel.add(b);
+		this.contentPanel.add(b);
+		return b;
+	}
+	
+	private void resizeBottom() {
+		this.resizeBottomButton(2, this.keepBothButton);
+		this.resizeBottomButton(1, this.deleteBothButton);
+	}
+	
+	private void resizeBottomButton(int posInStack, JButton button) {
+		button.setSize(this.getWidth(), BOTTOM_BUTTON_HEIGHT);
+		button.setLocation(0, this.getHeight() - (posInStack * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
 	}
 	
 	private void initializeLoadingScreen() {

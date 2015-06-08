@@ -77,6 +77,10 @@ public class ImagePanel extends JPanel {
 		if (this.image != null)
 			this.setImage(this.image);
 	}
+	
+	public void handleResize() {
+		//TODO
+	}
 
 	private void formatInfoPanel() {
 		this.infoPanel = new JPanel();
