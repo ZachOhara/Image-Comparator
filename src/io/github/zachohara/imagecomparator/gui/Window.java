@@ -123,6 +123,7 @@ public class Window extends JFrame {
 			this.remove(this.loadingPanel);
 			this.add(this.contentPanel);
 		}
+		this.handleWindowResize();
 		this.repaint();
 	}
 
