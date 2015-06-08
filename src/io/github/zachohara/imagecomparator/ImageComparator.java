@@ -82,6 +82,8 @@ public class ImageComparator {
 			}
 			this.window.setIsLoading(true);
 		}
+		this.progressBar.setValue(this.progressBar.getMaximum());
+		this.window.setLoadingText("Done! All remaining images are unique.");
 	}
 
 	/**
