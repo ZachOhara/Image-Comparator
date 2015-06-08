@@ -66,12 +66,17 @@ public class Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructs and formats a new Window.
+	 */
 	public Window() {
 		super(WINDOW_TITLE);
 		this.initializeAll();
 	}
 	
-
+	/**
+	 * Resizes all elemtents inside the window according to the new size.
+	 */
 	public void handleWindowResize() {
 		this.resizeContentPanel();
 		this.resizeTitle();
@@ -80,6 +85,11 @@ public class Window extends JFrame {
 		this.resizeLoadingPanel();
 	}
 
+	/**
+	 * Pauses until the user makes a descision for the current prompt, then
+	 * returns that descision.
+	 * @return the user descision for the current prompt.
+	 */
 	public String getChoice() {
 		this.selection = "";
 		this.isWaitingForSelection = true;
@@ -91,10 +101,20 @@ public class Window extends JFrame {
 		return this.selection;
 	}
 	
+	/**
+	 * Changes the text that is displayed above the progress bar in the loading
+	 * screen.
+	 * @param text the text that should be displayed in the loading screen.
+	 */
 	public void setLoadingText(String text) {
 		this.loadingText.setText(text);
 	}
 	
+	/**
+	 * Changes between the loading screen and the prompt screen being shown.
+	 * @param loading {@code true} if the loading screen should be displayed,
+	 * or {@code false} if the prompt screen should be displayed.
+	 */
 	public void setIsLoading(boolean loading) {
 		if (loading) {
 			this.remove(this.contentPanel);
@@ -106,6 +126,10 @@ public class Window extends JFrame {
 		this.repaint();
 	}
 
+	/**
+	 * Determines what to do when any button is pressed in the GUI. 
+	 * @param button the name of the button that was pressed.
+	 */
 	public void handleButtonPress(String button) {
 		if (this.isWaitingForSelection) {
 			this.selection = button;
@@ -113,6 +137,11 @@ public class Window extends JFrame {
 		}
 	}
 
+	/**
+	 * Changes the prompt screen to show a set of two images.
+	 * @param left the {@code Image} that should display on the left side.
+	 * @param right the {@code Image} that should display on the right side.
+	 */
 	public void setImages(Image left, Image right) {
 		this.setIsLoading(false);
 		this.leftPanel.setImage(left);
@@ -120,10 +149,15 @@ public class Window extends JFrame {
 		this.contentPanel.repaint();
 	}
 	
+	/**
+	 * Returns the {@code JProgressBar} object that represents the progress bar
+	 * that appears on the loading screen.
+	 * @return the progress bar object from the loading screen.
+	 */
 	public JProgressBar getLoadingProgressBar() {
 		return this.loadingProgress;
 	}
-
+	
 	public static void main(String[] args) throws IOException {
 		Window w = new Window();
 		w.setVisible(true);
@@ -155,12 +189,18 @@ public class Window extends JFrame {
 	 * 
 	 */
 	
+	/**
+	 * Initializes this window.
+	 */
 	private void initializeAll() {
 		this.initializeFrame();
 		this.initializeContentPanel();
 		this.initializeLoadingScreen();
 	}
 	
+	/**
+	 * Initializes the {@code JFrame} that contains this entire window.
+	 */
 	private void initializeFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
@@ -172,6 +212,10 @@ public class Window extends JFrame {
 		this.addWindowStateListener(listener);
 	}
 
+	/**
+	 * Initializes the content panel {@code JPanel}, which contains elements
+	 * from the prompt screen.
+	 */
 	private void initializeContentPanel() {
 		this.contentPanel = new JPanel();
 		this.contentPanel.setLayout(null);
@@ -183,10 +227,16 @@ public class Window extends JFrame {
 		this.add(this.contentPanel);
 	}
 	
+	/**
+	 * Resizes the content panel based on the current size of the window.
+	 */
 	private void resizeContentPanel() {
 		this.contentPanel.setSize(this.getSize());
 	}
 
+	/**
+	 * Formats the title of the window.
+	 */
 	private void formatTitle() {
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -198,23 +248,37 @@ public class Window extends JFrame {
 		this.contentPanel.add(this.titlePanel);
 	}
 	
+	/**
+	 * Resizes the title panel based on the current size of the window.
+	 */
 	private void resizeTitle() {
 		this.titlePanel.setSize(this.getWidth(), TOP_PANEL_HEIGHT);
 	}
 
+	/**
+	 * Formats both of the side panels in this window.
+	 */
 	private void formatSides() {
-		this.leftPanel = this.formatImagePanel(KEEP_LEFT_LABEL, "West");
-		this.rightPanel = this.formatImagePanel(KEEP_RIGHT_LABEL, "East");
+		this.leftPanel = this.formatImagePanel(KEEP_LEFT_LABEL);
+		this.rightPanel = this.formatImagePanel(KEEP_RIGHT_LABEL);
 		this.resizeBothSides();
 	}
 	
-	private ImagePanel formatImagePanel(String label, String side) {
-		ImagePanel p = new ImagePanel(this);
+	/**
+	 * Formats a single side panel in this window.
+	 * @param label the label of the side panel
+	 * @return the formatted, registered {@code ImagePanel} object.
+	 */
+	private ImagePanel formatImagePanel(String label) {
+		ImagePanel p = new ImagePanel();
 		p.addMouseListener(new Listener.MouseClickListener(this, label));
-		this.contentPanel.add(side, p);
+		this.contentPanel.add(p);
 		return p;
 	}
 	
+	/**
+	 * Resizes the side panels based on the current size of the window.
+	 */
 	private void resizeBothSides() {
 		this.resizeSide(this.leftPanel);
 		this.resizeSide(this.rightPanel);
@@ -222,18 +286,30 @@ public class Window extends JFrame {
 		this.rightPanel.setLocation(this.getWidth() / 2, this.titlePanel.getHeight());
 	}
 	
+	/**
+	 * Resizes a single side panel based on the current size of the window.
+	 * @param p the panel to be resized.
+	 */
 	private void resizeSide(ImagePanel p) {
 		p.setSize(this.getWidth() / 2,
 				this.getHeight() - this.titlePanel.getHeight() - (2 * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
 		p.handleResize();
 	}
 	
+	/**
+	 * Formats the two buttons on the bottom of the window.
+	 */
 	private void formatBottom() {
 		this.keepBothButton = this.formatBottomButton(KEEP_BOTH_LABEL);
 		this.deleteBothButton = this.formatBottomButton(DELETE_BOTH_LABEL);
 		this.resizeBottom();
 	}
 
+	/**
+	 * Formats a single button on the bottom of the window.
+	 * @param name the text to display on the button.
+	 * @return the formatted, registered, {@code JButton} object.
+	 */
 	private JButton formatBottomButton(String name) {
 		JButton b = new JButton(name);
 		b.addActionListener(new Listener.ButtonListener(this, name));
@@ -241,16 +317,27 @@ public class Window extends JFrame {
 		return b;
 	}
 	
+	/**
+	 * Resizes the bottom buttons based on the current size of the window.
+	 */
 	private void resizeBottom() {
 		this.resizeBottomButton(2, this.keepBothButton);
 		this.resizeBottomButton(1, this.deleteBothButton);
 	}
 	
+	/**
+	 * Resizes a single bottom button based on the current size of the window.
+	 * @param posInStack the order of the button from the bottom of the window.
+	 * @param button the button to be resized.
+	 */
 	private void resizeBottomButton(int posInStack, JButton button) {
 		button.setSize(this.getWidth(), BOTTOM_BUTTON_HEIGHT);
 		button.setLocation(0, this.getHeight() - (posInStack * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
 	}
 	
+	/**
+	 * Initializes the loading screen.
+	 */
 	private void initializeLoadingScreen() {
 		this.loadingPanel = new JPanel();
 		this.loadingPanel.setLayout(new BoxLayout(this.loadingPanel, BoxLayout.Y_AXIS));
@@ -264,10 +351,16 @@ public class Window extends JFrame {
 		this.loadingPanel.add(Box.createVerticalGlue());
 	}
 	
+	/**
+	 * Resizes the loading panel based on the current size of the window.
+	 */
 	private void resizeLoadingPanel() {
 		this.loadingPanel.setSize(this.getSize());
 	}
 	
+	/**
+	 * Initializes the text that is shown on the loading screen.
+	 */
 	private void initializeLoadingText() {
 		this.loadingText = new JLabel();
 		this.setLoadingText(DEFAULT_LOADING_TEXT);
@@ -276,12 +369,21 @@ public class Window extends JFrame {
 		this.loadingText.setAlignmentY(CENTER_ALIGNMENT);
 	}
 	
+	/**
+	 * Initializes the progress bar that is shown on the loading screen.
+	 */
 	private void initializeLoadingProgressBar() {
 		this.loadingProgress = new JProgressBar(0, 100);
 		this.loadingProgress.setValue(0);
 		this.loadingProgress.setStringPainted(true);
 	}
 	
+	/**
+	 * Get a {@code Font} object that represents the standard font in the 
+	 * specified size.
+	 * @param size the size of the font.
+	 * @return 
+	 */
 	private static Font getFontOfSize(int size) {
 		return new Font("Font size " + size, Font.PLAIN, size);
 	}

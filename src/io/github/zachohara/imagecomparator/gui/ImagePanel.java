@@ -32,8 +32,6 @@ import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
 
-	// TODO CLEAN THIS CLASS
-
 	private JPanel infoPanel;
 	private JLabel filename;
 	private JLabel dimension;
@@ -48,12 +46,19 @@ public class ImagePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public ImagePanel(Window owner) {
+	/**
+	 * Constructs a new {@code ImagePanel} object.
+	 */
+	public ImagePanel() {
 		super();
 		this.setLayout(null);
 		this.formatInfoPanel();
 	}
 
+	/**
+	 * Sets the image that should be displayed in this panel.
+	 * @param i the {@code Image} to be displayed in this panel.
+	 */
 	public void setImage(Image i) {
 		this.image = i;
 		if (this.componentImage != null)
@@ -66,34 +71,50 @@ public class ImagePanel extends JPanel {
 		this.add(this.componentImage);
 	}
 
+	/**
+	 * Resizes this panel based on the current size of the containing window.
+	 */
 	public void handleResize() {
 		this.resizeInfoPanel();
 		if (this.image != null)
 			this.setImage(this.image);
 	}
 
+	/**
+	 * Initializes the information panel.
+	 */
 	private void formatInfoPanel() {
 		this.infoPanel = new JPanel();
 		this.infoPanel.setLayout(new BoxLayout(this.infoPanel, BoxLayout.Y_AXIS));
 		this.infoPanel.setLocation(0, 0);
 		this.resizeInfoPanel();
-		this.filename = new JLabel("<<filename here>>"); // TODO remove the non-labels
-		this.dimension = new JLabel("<<dimensions here>>");
+		this.filename = new JLabel("-");
+		this.dimension = new JLabel("-");
 		this.formatInfoText(this.filename);
 		this.formatInfoText(this.dimension);
 		this.add(this.infoPanel);
 	}
 	
+	/**
+	 * Resizes the information panel based on the current size of the containing window.
+	 */
 	private void resizeInfoPanel() {
 		this.infoPanel.setSize(this.getWidth(), INFO_PANEL_HEIGHT);
 	}
 
+	/**
+	 * Formats the text in the information panel.
+	 * @param panel
+	 */
 	private void formatInfoText(JLabel panel) {
 		panel.setFont(INFO_FONT);
 		panel.setAlignmentX(CENTER_ALIGNMENT);
 		this.infoPanel.add(panel);
 	}
 	
+	/**
+	 * Resizes the image based on the current size of the containing window.
+	 */
 	private void resizeImage() {
 		this.componentImage.setSize(this.imageSize);
 		int imageAreaHeight = this.getHeight() - this.infoPanel.getHeight();
@@ -101,10 +122,22 @@ public class ImagePanel extends JPanel {
 				, (imageAreaHeight / 2) - (this.imageSize.height / 2));
 	}
 	
+	/**
+	 * Converts the current {@code Image} object into a {@code JComponent}
+	 * object that can be added to the window.
+	 * @return a {@code JComponent} object that can be added to the window.
+	 */
 	private JComponent getScaledImage() {
 		return new JLabel(new ImageIcon(scale(this.image.getImage(), this.imageSize)));
 	}
 	
+	/**
+	 * Gets the size that the given image should be scaled to so that both
+	 * its width and height fit inside this panel.
+	 * @param b the image to scale
+	 * @return a {@code Dimension} object representing the ideal scaled size
+	 * of the image {@code b};
+	 */
 	private Dimension getScaledSize(BufferedImage b) {
 		double height = b.getHeight();
 		double width = b.getWidth();
@@ -117,6 +150,13 @@ public class ImagePanel extends JPanel {
 		return new Dimension((int) width, (int) height);
 	}
 
+	/**
+	 * Scales the given {@code BufferedImage} to the size of the given
+	 * {@code Dimension} object.
+	 * @param bImg the image to be scaled.
+	 * @param dim the size to scale the image to.
+	 * @return the scaled image.
+	 */
 	private static BufferedImage scale(BufferedImage bImg, Dimension dim) {
 		int newW = dim.width;
 		int newH = dim.height;
