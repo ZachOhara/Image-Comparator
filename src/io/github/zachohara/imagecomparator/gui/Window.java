@@ -20,7 +20,6 @@ package io.github.zachohara.imagecomparator.gui;
 import io.github.zachohara.imagecomparator.FileSelector;
 import io.github.zachohara.imagecomparator.image.Image;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
@@ -77,10 +76,6 @@ public class Window extends JFrame {
 		this.resizeTitle();
 		this.resizeBottom();
 		this.resizeBothSides();
-		
-		int newWidth = this.getWidth();
-		this.leftPanel.handleResize(newWidth / 2);
-		this.rightPanel.handleResize(newWidth / 2);
 	}
 
 	public String getChoice() {

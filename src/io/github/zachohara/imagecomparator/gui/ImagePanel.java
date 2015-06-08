@@ -19,7 +19,6 @@ package io.github.zachohara.imagecomparator.gui;
 
 import io.github.zachohara.imagecomparator.image.Image;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -40,56 +39,52 @@ public class ImagePanel extends JPanel {
 	private JLabel dimension;
 	private Image image;
 	private JComponent componentImage;
-//	private Component rigidArea;
+	private Dimension imageSize;
 
 	private static final int FONT_SIZE = 17;
 	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, FONT_SIZE);
+	private static final int INFO_PANEL_HEIGHT = 50;
 
 	private static final long serialVersionUID = 1L;
 
 	public ImagePanel(Window owner) {
 		super();
-		this.setLayout(new BorderLayout());
+		this.setLayout(null);
 		this.formatInfoPanel();
 	}
 
-	public synchronized void setImage(Image i) {
-//		if (this.componentImage != null)
-//			this.remove(this.componentImage);
+	public void setImage(Image i) {
 		this.image = i;
-		JComponent newImage = getScaledImage(i.getImage());
-		this.filename.setText(i.getName());
-		this.dimension.setText(i.getDimensionString());
-		newImage.setAlignmentX(CENTER_ALIGNMENT);
-		newImage.setAlignmentY(CENTER_ALIGNMENT);
-		this.add(newImage);
 		if (this.componentImage != null)
 			this.remove(this.componentImage);
-		this.componentImage = newImage;
+		this.imageSize = this.getScaledSize(i.getImage());
+		this.componentImage = this.getScaledImage();
+		this.filename.setText(i.getName());
+		this.dimension.setText(i.getDimensionString());
+		this.resizeImage();
+		this.add(this.componentImage);
 	}
 
-	public synchronized void handleResize(int width) {
-//		if (this.rigidArea != null)
-//			this.remove(this.rigidArea);
-//		this.rigidArea = Box.createHorizontalStrut(width);
-		this.setPreferredSize(new Dimension(width, this.getHeight()));
-//		this.add(this.rigidArea);
+	public void handleResize() {
+		this.resizeInfoPanel();
 		if (this.image != null)
 			this.setImage(this.image);
-	}
-	
-	public void handleResize() {
-		//TODO
 	}
 
 	private void formatInfoPanel() {
 		this.infoPanel = new JPanel();
 		this.infoPanel.setLayout(new BoxLayout(this.infoPanel, BoxLayout.Y_AXIS));
-		this.filename = new JLabel("<<filename here>>");
+		this.infoPanel.setLocation(0, 0);
+		this.resizeInfoPanel();
+		this.filename = new JLabel("<<filename here>>"); // TODO remove the non-labels
 		this.dimension = new JLabel("<<dimensions here>>");
 		this.formatInfoText(this.filename);
 		this.formatInfoText(this.dimension);
-		this.add("North", this.infoPanel);
+		this.add(this.infoPanel);
+	}
+	
+	private void resizeInfoPanel() {
+		this.infoPanel.setSize(this.getWidth(), INFO_PANEL_HEIGHT);
 	}
 
 	private void formatInfoText(JLabel panel) {
@@ -97,8 +92,19 @@ public class ImagePanel extends JPanel {
 		panel.setAlignmentX(CENTER_ALIGNMENT);
 		this.infoPanel.add(panel);
 	}
-
-	private JComponent getScaledImage(BufferedImage b) {
+	
+	private void resizeImage() {
+		this.componentImage.setSize(this.imageSize);
+		int imageAreaHeight = this.getHeight() - this.infoPanel.getHeight();
+		this.componentImage.setLocation((this.getWidth() / 2) - (this.imageSize.width / 2)
+				, (imageAreaHeight / 2) - (this.imageSize.height / 2));
+	}
+	
+	private JComponent getScaledImage() {
+		return new JLabel(new ImageIcon(scale(this.image.getImage(), this.imageSize)));
+	}
+	
+	private Dimension getScaledSize(BufferedImage b) {
 		double height = b.getHeight();
 		double width = b.getWidth();
 		double scale = Math.max(height / (this.getHeight() - this.infoPanel.getHeight()),
@@ -107,15 +113,17 @@ public class ImagePanel extends JPanel {
 			height /= scale;
 			width /= scale;
 		}
-		return new JLabel(new ImageIcon(scale(b, (int) width - 5, (int) height - 5)));
+		return new Dimension((int) width, (int) height);
 	}
 
-	private static BufferedImage scale(BufferedImage b, int newW, int newH) {
-		int oldW = b.getWidth();
-		int oldH = b.getHeight();
-		BufferedImage db = new BufferedImage(newW, newH, b.getType());
+	private static BufferedImage scale(BufferedImage bImg, Dimension dim) {
+		int newW = dim.width;
+		int newH = dim.height;
+		int oldW = bImg.getWidth();
+		int oldH = bImg.getHeight();
+		BufferedImage db = new BufferedImage(newW, newH, bImg.getType());
 		Graphics2D g = db.createGraphics();
-		g.drawImage(b, 0, 0, newW, newH, 0, 0, oldW, oldH, null);
+		g.drawImage(bImg, 0, 0, newW, newH, 0, 0, oldW, oldH, null);
 		g.dispose();
 		return db;
 	}
