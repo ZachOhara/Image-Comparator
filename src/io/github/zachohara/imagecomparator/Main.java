@@ -38,7 +38,6 @@ public class Main {
 			System.exit(1);
 		}
 		comparator.compareAll();
-		//System.exit(0);
 	}
 
 }
