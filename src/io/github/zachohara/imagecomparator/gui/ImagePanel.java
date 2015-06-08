@@ -44,6 +44,7 @@ public class ImagePanel extends JPanel {
 	private static final int FONT_SIZE = 17;
 	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, FONT_SIZE);
 	private static final int INFO_PANEL_HEIGHT = 50;
+	private static final int IMAGE_BORDER = 20;
 
 	private static final long serialVersionUID = 1L;
 
@@ -107,8 +108,8 @@ public class ImagePanel extends JPanel {
 	private Dimension getScaledSize(BufferedImage b) {
 		double height = b.getHeight();
 		double width = b.getWidth();
-		double scale = Math.max(height / (this.getHeight() - this.infoPanel.getHeight()),
-				width / this.getWidth());
+		double scale = Math.max(height / (this.getHeight() - this.infoPanel.getHeight() - IMAGE_BORDER),
+				width / (this.getWidth() - IMAGE_BORDER));
 		if (scale > 1) {
 			height /= scale;
 			width /= scale;
