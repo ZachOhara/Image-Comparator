@@ -23,6 +23,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 public abstract class Listener {
 
@@ -49,7 +51,7 @@ public abstract class Listener {
 	/**
 	 * A listener that listens for the user resizing a window.
 	 */
-	public static class WindowResizeListener extends ComponentAdapter {
+	public static class WindowResizeListener extends ComponentAdapter implements WindowStateListener {
 
 		private Window owner;
 
@@ -57,7 +59,13 @@ public abstract class Listener {
 			this.owner = win;
 		}
 
+		@Override
 		public void componentResized(ComponentEvent e) {
+			this.owner.handleWindowResize();
+		}
+
+		@Override
+		public void windowStateChanged(WindowEvent e) {
 			this.owner.handleWindowResize();
 		}
 

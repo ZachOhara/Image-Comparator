@@ -70,6 +70,7 @@ public class Window extends JFrame {
 		super(WINDOW_TITLE);
 		this.initializeAll();
 	}
+	
 
 	public void handleWindowResize() {
 		this.resizeContentPanel();
@@ -166,7 +167,9 @@ public class Window extends JFrame {
 		this.setLayout(null);
 		this.setResizable(true);
 		this.setLocationRelativeTo(null);
-		this.addComponentListener(new Listener.WindowResizeListener(this));
+		Listener.WindowResizeListener listener = new Listener.WindowResizeListener(this);
+		this.addComponentListener(listener);
+		this.addWindowStateListener(listener);
 	}
 
 	private void initializeContentPanel() {
