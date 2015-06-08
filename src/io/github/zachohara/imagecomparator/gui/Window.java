@@ -76,6 +76,7 @@ public class Window extends JFrame {
 		this.resizeTitle();
 		this.resizeBottom();
 		this.resizeBothSides();
+		this.resizeLoadingPanel();
 	}
 
 	public String getChoice() {
@@ -250,12 +251,18 @@ public class Window extends JFrame {
 	private void initializeLoadingScreen() {
 		this.loadingPanel = new JPanel();
 		this.loadingPanel.setLayout(new BoxLayout(this.loadingPanel, BoxLayout.Y_AXIS));
+		this.loadingPanel.setLocation(0, 0);
+		this.resizeLoadingPanel();
 		this.initializeLoadingText();
 		this.initializeLoadingProgressBar();
 		this.loadingPanel.add(Box.createVerticalGlue());
 		this.loadingPanel.add(this.loadingText);
 		this.loadingPanel.add(this.loadingProgress);
 		this.loadingPanel.add(Box.createVerticalGlue());
+	}
+	
+	private void resizeLoadingPanel() {
+		this.loadingPanel.setSize(this.getSize());
 	}
 	
 	private void initializeLoadingText() {
