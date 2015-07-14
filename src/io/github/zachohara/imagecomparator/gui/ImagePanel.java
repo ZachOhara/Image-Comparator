@@ -155,7 +155,7 @@ public class ImagePanel extends JPanel {
 	/**
 	 * Formats the text in the information panel.
 	 * 
-	 * @param panel
+	 * @param panel the panel to format.
 	 */
 	private void formatInfoText(JLabel panel) {
 		panel.setFont(INFO_FONT);
