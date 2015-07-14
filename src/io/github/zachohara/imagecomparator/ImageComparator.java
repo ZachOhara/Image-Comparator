@@ -1,18 +1,17 @@
-/*
- *  Copyright (C) 2015 Zach Ohara
+/* Copyright (C) 2015 Zach Ohara
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.zachohara.imagecomparator;
@@ -28,17 +27,42 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
+/**
+ * The {@code ImageComparator} class contains all the core functionality for comparing
+ * different images. The images are iterated over in this class, and any matches are then
+ * sent to the main window.
+ * 
+ * @author Zach Ohara
+ */
 public class ImageComparator {
 
+	/**
+	 * The main {@code Window} that matching images are sent to.
+	 */
 	private Window window;
+
+	/**
+	 * The progress bar that is displayed on the window while images are loading.
+	 */
 	private JProgressBar progressBar;
+
+	/**
+	 * The list of all images that need to be compared.
+	 */
 	private List<Image> imageList;
 
+
+	/**
+	 * The maximum percent difference between two images before the two images are
+	 * considered distinct. Raising this number will cause more false positives, and
+	 * lowering this number will cause more actual matches to be missed.
+	 */
 	private static final double COMPARISON_THRESHHOLD = 0.15;
 
 	/**
-	 * Constructs a new {@code ImageComparator} that will compare the given files with the
+	 * Constructs a new {@code ImageComparator} that will compare the given files in the
 	 * given window.
+	 * 
 	 * @param fileList the list of files to be checked.
 	 * @param win the window to display the images in.
 	 */
@@ -49,8 +73,8 @@ public class ImageComparator {
 	}
 
 	/**
-	 * Iterates through all images and compares them. Can be thought of as a 'main' method
-	 * for this class.
+	 * Iterates through all images and compares them. This method can be thought of as a
+	 * 'main' method for this class, because it contains all the core functionality.
 	 */
 	public void compareAll() {
 		this.window.setLoadingText("Looking for matches...");
@@ -59,6 +83,7 @@ public class ImageComparator {
 		this.progressBar.setValue(0);
 		for (int i = 0; i < imageList.size(); i++) {
 			for (int j = i + 1; j < imageList.size(); j++) {
+
 				Image left = this.imageList.get(i);
 				Image right = this.imageList.get(j);
 				if (left.percentDifference(right) < COMPARISON_THRESHHOLD) {
@@ -79,6 +104,7 @@ public class ImageComparator {
 					this.window.setIsLoading(true);
 				}
 				this.incrementProgressBar(1);
+
 			}
 			this.window.setIsLoading(true);
 		}
@@ -89,6 +115,7 @@ public class ImageComparator {
 	/**
 	 * Constructs and populates a list of {@code Image} objects from an array of {@code File}
 	 * objects.
+	 * 
 	 * @param files the array of {@code File}s to use
 	 */
 	private void populateImageList(File[] files) {
@@ -121,6 +148,7 @@ public class ImageComparator {
 
 	/**
 	 * Warns the user that a selected file is not a real image file.
+	 * 
 	 * @param filename the name of the invalid file.
 	 */
 	private static void warnInvalidType(String filename) {
@@ -130,6 +158,7 @@ public class ImageComparator {
 
 	/**
 	 * Warns the user that a selected file could not be loaded for an unknown reason.
+	 * 
 	 * @param filename the name of the unloadable file.
 	 */
 	private static void warnLoadError(String filename) {
@@ -139,6 +168,7 @@ public class ImageComparator {
 
 	/**
 	 * Increments the progress bar by n.
+	 * 
 	 * @param n the increment of the progress bar
 	 */
 	private void incrementProgressBar(int n) {
@@ -147,6 +177,7 @@ public class ImageComparator {
 
 	/**
 	 * Returns the sum of the nth consecutive integers
+	 * 
 	 * @param n the integer to be summed
 	 * @return the sum of the nth consecutive integers
 	 */
