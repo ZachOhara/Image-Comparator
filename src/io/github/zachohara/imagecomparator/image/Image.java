@@ -34,12 +34,12 @@ public class Image {
 	/**
 	 * The underlying {@code BufferedImage} for this image.
 	 */
-	BufferedImage image;
+	private BufferedImage image;
 
 	/**
 	 * The {@code File} that this image was loaded from.
 	 */
-	File file;
+	private File file;
 
 	/**
 	 * Creates an image from a given filename.

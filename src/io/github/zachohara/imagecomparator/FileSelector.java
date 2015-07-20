@@ -49,7 +49,7 @@ public class FileSelector {
 	/**
 	 * The title for the window.
 	 */
-	public static final String WINDOW_TITLE = "Select files to compare";
+	private static final String WINDOW_TITLE = "Select files to compare";
 
 	/**
 	 * Constructs a new {@code FileSelector}, but does not display any windows.
