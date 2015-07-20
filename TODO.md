@@ -7,3 +7,6 @@
 
 * Write better documentation for ImageComparator.compareAll()
 * Split gui.Window into more classes
+* (?) Change gui.Listener and image.Pixel to be uninstantiatable through a private default contructor, instead of being abstract.
+* Override toString() more
+* Remove `window` as an instance variable in FileSelector
