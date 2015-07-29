@@ -21,7 +21,14 @@ package io.github.zachohara.imagecomparator.image;
  * 
  * @author Zach Ohara.
  */
-public abstract class Pixel {
+public final class Pixel {
+	
+	/**
+	 * The {@code Pixel} class should not be instantiable.
+	 */
+	private Pixel() {
+		
+	}
 
 	/**
 	 * Compares two 8-bit RGB color integers and finds the difference between them. The returned
