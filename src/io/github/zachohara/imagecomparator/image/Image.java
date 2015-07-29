@@ -26,7 +26,7 @@ import javax.imageio.ImageIO;
  * An {@code Image} object contains a {@code BufferedImage} object and a {@code File} that
  * the image was loaded from. It contains methods used for comparing two different images,
  * and other methods that are used for displaying the images in a window.
- * 
+ *
  * @author Zach Ohara
  */
 public class Image {
@@ -43,7 +43,7 @@ public class Image {
 
 	/**
 	 * Creates an image from a given filename.
-	 * 
+	 *
 	 * @param filename the file path of the image
 	 * @throws IOException if the given file doesn't exist, is not an image, or otherwise
 	 * cannot be loaded as a {@code BufferedImage}.
@@ -56,7 +56,7 @@ public class Image {
 	/**
 	 * Returns the percent difference between the pixels of this image and of another
 	 * image.
-	 * 
+	 *
 	 * @param other the {@code Image} to compare with this image.
 	 * @return the difference between the two images.
 	 * @see Pixel#colorDifference(int, int)
@@ -76,24 +76,24 @@ public class Image {
 		double[][] pixelDifferences = new double[smaller.getHeight()][smaller.getWidth()];
 		for (int row = 0; row < smaller.getHeight(); row++) {
 			for (int col = 0; col < smaller.getWidth(); col++) {
-				pixelDifferences[row][col] = getPixelDifference(smaller, larger, row, col);
+				pixelDifferences[row][col] = Image.getPixelDifference(smaller, larger, row, col);
 			}
 		}
-		return getAverage(pixelDifferences);
+		return Image.getAverage(pixelDifferences);
 	}
 
 	/**
 	 * Returns the color difference between two pixels after scaling the coordinates
 	 * relative to the rest of the image.
-	 * 
+	 *
 	 * @param fromImage the image for coordinates to be scaled from.
 	 * @param toImage the image for coordinates to be scaled to.
 	 * @param fromRow the row of a pixel in {@code fromImage}.
 	 * @param fromCol the column of a pixel in {@code fromImage}.
 	 * @return the color difference between the relative pixels.
 	 */
-	private static double getPixelDifference(BufferedImage fromImage,
-			BufferedImage toImage, int fromRow, int fromCol) {
+	private static double getPixelDifference(BufferedImage fromImage, BufferedImage toImage, int fromRow,
+			int fromCol) {
 		int toRow = (int) (((double) fromRow / fromImage.getHeight()) * toImage.getHeight());
 		int toCol = (int) (((double) fromCol / fromImage.getWidth()) * toImage.getWidth());
 		int fromColor = fromImage.getRGB(fromCol, fromRow);
@@ -111,7 +111,7 @@ public class Image {
 	/**
 	 * Returns the name of the file. More specifically, return the last part of the
 	 * fully-qualified name of the file, after the final directory delimiter.
-	 * 
+	 *
 	 * @return the name of the file.
 	 */
 	public String getName() {
@@ -120,7 +120,7 @@ public class Image {
 
 	/**
 	 * Returns a string representation of the size of this image.
-	 * 
+	 *
 	 * @return the size of this image.
 	 */
 	public String getDimensionString() {
@@ -129,7 +129,7 @@ public class Image {
 
 	/**
 	 * Returns a {@code BufferedImage} of this image.
-	 * 
+	 *
 	 * @return the {@code BufferedImage} of this image.
 	 */
 	public BufferedImage getImage() {
@@ -138,16 +138,18 @@ public class Image {
 
 	/**
 	 * Returns the mean of all values in an array of doubles.
-	 * 
+	 *
 	 * @param array the array to find the mean value of.
 	 * @return the mean value of the array.
 	 */
 	private static double getAverage(double[][] array) {
 		double sum = 0;
 		double elements = array.length * array[0].length;
-		for (double[] row : array)
-			for (double d : row)
+		for (double[] row : array) {
+			for (double d : row) {
 				sum += d;
+			}
+		}
 		return sum / elements;
 	}
 

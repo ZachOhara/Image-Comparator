@@ -31,7 +31,7 @@ import javax.swing.JProgressBar;
  * The {@code ImageComparator} class contains all the core functionality for comparing
  * different images. The images are iterated over in this class, and any matches are then
  * sent to the main window.
- * 
+ *
  * @author Zach Ohara
  */
 public class ImageComparator {
@@ -51,7 +51,6 @@ public class ImageComparator {
 	 */
 	private List<Image> imageList;
 
-
 	/**
 	 * The maximum percent difference between two images before the two images are
 	 * considered distinct. Raising this number will cause more false positives, and
@@ -62,7 +61,7 @@ public class ImageComparator {
 	/**
 	 * Constructs a new {@code ImageComparator} that will compare the given files in the
 	 * given window.
-	 * 
+	 *
 	 * @param fileList the list of files to be checked.
 	 * @param win the window to display the images in.
 	 */
@@ -79,25 +78,26 @@ public class ImageComparator {
 	public void compareAll() {
 		this.window.setLoadingText("Looking for matches...");
 		this.window.setIsLoading(true);
-		this.progressBar.setMaximum(sumOfN(this.imageList.size()));
+		this.progressBar.setMaximum(ImageComparator.sumOfN(this.imageList.size()));
 		this.progressBar.setValue(0);
-		for (int i = 0; i < imageList.size(); i++) {
-			for (int j = i + 1; j < imageList.size(); j++) {
+		for (int i = 0; i < this.imageList.size(); i++) {
+			for (int j = i + 1; j < this.imageList.size(); j++) {
 
 				Image left = this.imageList.get(i);
 				Image right = this.imageList.get(j);
-				if (left.percentDifference(right) < COMPARISON_THRESHHOLD) {
+				if (left.percentDifference(right) < ImageComparator.COMPARISON_THRESHHOLD) {
 					this.window.setImages(left, right);
 					String result = this.window.getChoice();
 					if (result.equals(Window.KEEP_LEFT_LABEL) || result == Window.DELETE_BOTH_LABEL) {
 						right.delete();
-						imageList.remove(right);
+						this.imageList.remove(right);
 						j--;
-					} else if (result.equalsIgnoreCase(Window.KEEP_RIGHT_LABEL) || result.equals(Window.DELETE_BOTH_LABEL)) {
+					} else if (result.equalsIgnoreCase(Window.KEEP_RIGHT_LABEL)
+							|| result.equals(Window.DELETE_BOTH_LABEL)) {
 						right.delete();
-						imageList.remove(left);
+						this.imageList.remove(left);
 						i--;
-						this.incrementProgressBar(imageList.size() - j - 1);
+						this.incrementProgressBar(this.imageList.size() - j - 1);
 						this.window.setIsLoading(true);
 						break;
 					}
@@ -113,9 +113,9 @@ public class ImageComparator {
 	}
 
 	/**
-	 * Constructs and populates a list of {@code Image} objects from an array of {@code File}
-	 * objects.
-	 * 
+	 * Constructs and populates a list of {@code Image} objects from an array of
+	 * {@code File} objects.
+	 *
 	 * @param files the array of {@code File}s to use
 	 */
 	private void populateImageList(File[] files) {
@@ -138,17 +138,18 @@ public class ImageComparator {
 				try {
 					this.imageList.add(new Image(f));
 				} catch (IOException e) {
-					warnLoadError(name);
+					ImageComparator.warnLoadError(name);
 				}
-			} else
-				warnInvalidType(name);
+			} else {
+				ImageComparator.warnInvalidType(name);
+			}
 			this.incrementProgressBar(1);
 		}
 	}
 
 	/**
 	 * Warns the user that a selected file is not a real image file.
-	 * 
+	 *
 	 * @param filename the name of the invalid file.
 	 */
 	private static void warnInvalidType(String filename) {
@@ -158,17 +159,17 @@ public class ImageComparator {
 
 	/**
 	 * Warns the user that a selected file could not be loaded for an unknown reason.
-	 * 
+	 *
 	 * @param filename the name of the unloadable file.
 	 */
 	private static void warnLoadError(String filename) {
-		JOptionPane.showMessageDialog(null, "An error occured while trying to open " + filename +".",
+		JOptionPane.showMessageDialog(null, "An error occured while trying to open " + filename + ".",
 				"Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
 	 * Increments the progress bar by n.
-	 * 
+	 *
 	 * @param n the increment of the progress bar
 	 */
 	private void incrementProgressBar(int n) {
@@ -177,14 +178,15 @@ public class ImageComparator {
 
 	/**
 	 * Returns the sum of the nth consecutive integers
-	 * 
+	 *
 	 * @param n the integer to be summed
 	 * @return the sum of the nth consecutive integers
 	 */
 	private static int sumOfN(int n) {
 		int sum = 0;
-		for (int i = 1; i <= n; i++)
+		for (int i = 1; i <= n; i++) {
 			sum += i;
+		}
 		return sum;
 	}
 

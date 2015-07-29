@@ -16,20 +16,20 @@
 
 package io.github.zachohara.imagecomparator;
 
-import java.util.concurrent.CancellationException;
-
 import io.github.zachohara.imagecomparator.gui.Window;
+
+import java.util.concurrent.CancellationException;
 
 /**
  * The {@code Main} class acts as the entry point for the application.
- * 
+ *
  * @author Zach Ohara
  */
 public class Main {
 
 	/**
 	 * The main procedure for entire application.
-	 * 
+	 *
 	 * @param args command line arguments.
 	 */
 	public static void main(String[] args) {

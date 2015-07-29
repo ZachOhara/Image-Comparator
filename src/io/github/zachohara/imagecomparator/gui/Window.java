@@ -18,6 +18,7 @@ package io.github.zachohara.imagecomparator.gui;
 
 import io.github.zachohara.imagecomparator.image.Image;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -32,7 +33,7 @@ import javax.swing.JProgressBar;
 /**
  * A {@code Window} is a {@code JFrame} that acts as the main interface between the
  * program's functionality and the user.
- * 
+ *
  * @author Zach Ohara
  */
 public class Window extends JFrame {
@@ -47,7 +48,6 @@ public class Window extends JFrame {
 	 * The last selection that the user made.
 	 */
 	private String selection;
-
 
 	/**
 	 * The text that is displayed while the window is loading.
@@ -66,8 +66,8 @@ public class Window extends JFrame {
 	private JLabel titleText;
 
 	/**
-	 * The panel that extends over the top of the selection screen, and only contains
-	 * the {@link #titleText title text}.
+	 * The panel that extends over the top of the selection screen, and only contains the
+	 * {@link #titleText title text}.
 	 */
 	private JPanel titlePanel;
 
@@ -101,7 +101,6 @@ public class Window extends JFrame {
 	 * The button that allows the user to delete both of the presented images.
 	 */
 	private JButton deleteBothButton;
-
 
 	/**
 	 * The default size, in {width, height} format, of the window.
@@ -150,7 +149,6 @@ public class Window extends JFrame {
 	 */
 	private static final int BOTTOM_CUTOFF_CORRECTION = 38;
 
-
 	/**
 	 * The invisible 'label' on the left image, which the user clicks to keep.
 	 */
@@ -177,7 +175,7 @@ public class Window extends JFrame {
 	 * Constructs and formats a new {@code Window}.
 	 */
 	public Window() {
-		super(WINDOW_TITLE);
+		super(Window.WINDOW_TITLE);
 		this.initializeAll();
 	}
 
@@ -196,7 +194,7 @@ public class Window extends JFrame {
 	/**
 	 * Pauses until the user makes a descision for the current prompt, then returns that
 	 * descision.
-	 * 
+	 *
 	 * @return the user descision for the current prompt.
 	 */
 	public String getChoice() {
@@ -205,14 +203,15 @@ public class Window extends JFrame {
 		while (this.isWaitingForSelection) {
 			try {
 				Thread.sleep(10);
-			} catch (InterruptedException ignore) {}
+			} catch (InterruptedException ignore) {
+			}
 		}
 		return this.selection;
 	}
 
 	/**
 	 * Changes the text that is displayed above the progress bar in the loading screen.
-	 * 
+	 *
 	 * @param text the text that should be displayed in the loading screen.
 	 */
 	public void setLoadingText(String text) {
@@ -221,7 +220,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Changes between the loading screen and the selection screen being shown.
-	 * 
+	 *
 	 * @param loading {@code true} if the loading screen should be displayed, or
 	 * {@code false} if the selection screen should be displayed.
 	 */
@@ -239,7 +238,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Determines what to do when a button is pressed in the GUI.
-	 * 
+	 *
 	 * @param button the name of the button that was pressed.
 	 */
 	public void handleButtonPress(String button) {
@@ -251,7 +250,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Changes the prompt screen to show a set of two images.
-	 * 
+	 *
 	 * @param left the {@code Image} that should display on the left side.
 	 * @param right the {@code Image} that should display on the right side.
 	 */
@@ -264,7 +263,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Returns the {@code JProgressBar} object that appears on the loading screen.
-	 * 
+	 *
 	 * @return the progress bar object from the loading screen.
 	 */
 	public JProgressBar getLoadingProgressBar() {
@@ -272,24 +271,15 @@ public class Window extends JFrame {
 	}
 
 	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * Weird window init stuff below:
-	 * ==============================
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 * Weird window init stuff below: ==============================
 	 */
 
 	/**
@@ -307,7 +297,7 @@ public class Window extends JFrame {
 	 */
 	private void initializeFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(DEFAULT_SIZE[0], DEFAULT_SIZE[1]);
+		this.setSize(Window.DEFAULT_SIZE[0], Window.DEFAULT_SIZE[1]);
 		this.setLayout(null);
 		this.setResizable(true);
 		this.setLocationRelativeTo(null);
@@ -344,8 +334,8 @@ public class Window extends JFrame {
 	private void formatTitle() {
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		this.titleText = new JLabel(TITLE_INSTRUCTION_TEXT);
-		this.titleText.setFont(getFontOfSize(TITLE_TEXT_SIZE));
+		this.titleText = new JLabel(Window.TITLE_INSTRUCTION_TEXT);
+		this.titleText.setFont(Window.getFontOfSize(Window.TITLE_TEXT_SIZE));
 		this.titleText.setLocation(0, 0);
 		this.resizeTitle();
 		this.titlePanel.add(this.titleText);
@@ -356,21 +346,21 @@ public class Window extends JFrame {
 	 * Resizes the title panel based on the current size of the window.
 	 */
 	private void resizeTitle() {
-		this.titlePanel.setSize(this.getWidth(), TOP_PANEL_HEIGHT);
+		this.titlePanel.setSize(this.getWidth(), Window.TOP_PANEL_HEIGHT);
 	}
 
 	/**
 	 * Formats both of the side panels in this window.
 	 */
 	private void formatSides() {
-		this.leftPanel = this.formatImagePanel(KEEP_LEFT_LABEL);
-		this.rightPanel = this.formatImagePanel(KEEP_RIGHT_LABEL);
+		this.leftPanel = this.formatImagePanel(Window.KEEP_LEFT_LABEL);
+		this.rightPanel = this.formatImagePanel(Window.KEEP_RIGHT_LABEL);
 		this.resizeBothSides();
 	}
 
 	/**
 	 * Formats a single side panel in this window.
-	 * 
+	 *
 	 * @param label the label of the side panel.
 	 * @return the formatted, registered {@code ImagePanel} object.
 	 */
@@ -393,12 +383,12 @@ public class Window extends JFrame {
 
 	/**
 	 * Resizes a single side panel based on the current size of the window.
-	 * 
+	 *
 	 * @param p the panel to be resized.
 	 */
 	private void resizeSide(ImagePanel p) {
-		p.setSize(this.getWidth() / 2,
-				this.getHeight() - this.titlePanel.getHeight() - (2 * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
+		p.setSize(this.getWidth() / 2, this.getHeight() - this.titlePanel.getHeight()
+				- (2 * Window.BOTTOM_BUTTON_HEIGHT) - Window.BOTTOM_CUTOFF_CORRECTION);
 		p.handleResize();
 	}
 
@@ -406,14 +396,14 @@ public class Window extends JFrame {
 	 * Formats the two buttons on the bottom of the window.
 	 */
 	private void formatBottom() {
-		this.keepBothButton = this.formatBottomButton(KEEP_BOTH_LABEL);
-		this.deleteBothButton = this.formatBottomButton(DELETE_BOTH_LABEL);
+		this.keepBothButton = this.formatBottomButton(Window.KEEP_BOTH_LABEL);
+		this.deleteBothButton = this.formatBottomButton(Window.DELETE_BOTH_LABEL);
 		this.resizeBottom();
 	}
 
 	/**
 	 * Formats a single button on the bottom of the window.
-	 * 
+	 *
 	 * @param name the text to display on the button.
 	 * @return the formatted, registered, {@code JButton}.
 	 */
@@ -434,13 +424,14 @@ public class Window extends JFrame {
 
 	/**
 	 * Resizes a single bottom button based on the current size of the window.
-	 * 
+	 *
 	 * @param posInStack the order of the button from the bottom of the window.
 	 * @param button the button to be resized.
 	 */
 	private void resizeBottomButton(int posInStack, JButton button) {
-		button.setSize(this.getWidth(), BOTTOM_BUTTON_HEIGHT);
-		button.setLocation(0, this.getHeight() - (posInStack * BOTTOM_BUTTON_HEIGHT) - BOTTOM_CUTOFF_CORRECTION);
+		button.setSize(this.getWidth(), Window.BOTTOM_BUTTON_HEIGHT);
+		button.setLocation(0, this.getHeight() - (posInStack * Window.BOTTOM_BUTTON_HEIGHT)
+				- Window.BOTTOM_CUTOFF_CORRECTION);
 	}
 
 	/**
@@ -471,10 +462,10 @@ public class Window extends JFrame {
 	 */
 	private void initializeLoadingText() {
 		this.loadingText = new JLabel();
-		this.setLoadingText(DEFAULT_LOADING_TEXT);
-		this.loadingText.setFont(getFontOfSize(LOADING_TEXT_SIZE));
-		this.loadingText.setAlignmentX(CENTER_ALIGNMENT);
-		this.loadingText.setAlignmentY(CENTER_ALIGNMENT);
+		this.setLoadingText(Window.DEFAULT_LOADING_TEXT);
+		this.loadingText.setFont(Window.getFontOfSize(Window.LOADING_TEXT_SIZE));
+		this.loadingText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.loadingText.setAlignmentY(Component.CENTER_ALIGNMENT);
 	}
 
 	/**
@@ -488,7 +479,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Gets a {@code Font} of the standard font, but in the specified size.
-	 * 
+	 *
 	 * @param size the size of the font.
 	 * @return the standard {@code Font} in the given size.
 	 */

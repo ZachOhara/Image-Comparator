@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 /**
  * A {@code FileSelector} is essentially a file selection window. It creates a window,
  * displays that window, and then returns file that the user selects.
- * 
+ *
  * @author Zach Ohara
  */
 public class FileSelector {
@@ -39,7 +39,6 @@ public class FileSelector {
 	 * The {@code FileDialog} that is displayed in the window.
 	 */
 	private FileDialog dialog;
-
 
 	/**
 	 * A list of valid image filetypes that can be read by this program.
@@ -55,24 +54,25 @@ public class FileSelector {
 	 * Constructs a new {@code FileSelector}, but does not display any windows.
 	 */
 	public FileSelector() {
-		this.window = new JFrame(WINDOW_TITLE);
+		this.window = new JFrame(FileSelector.WINDOW_TITLE);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.dialog = new FileDialog(this.window, WINDOW_TITLE);
+		this.dialog = new FileDialog(this.window, FileSelector.WINDOW_TITLE);
 		this.dialog.setMode(FileDialog.LOAD);
 		this.dialog.setMultipleMode(true);
 	}
 
 	/**
 	 * Prompts the user to select files to compare, and returns the unfiltered selection.
-	 * 
+	 *
 	 * @return the files selected by the user.
 	 * @throws CancellationException if the user closed the selection dialog.
 	 */
 	public File[] getFiles() throws CancellationException {
 		this.dialog.setVisible(true);
 		File[] selected = this.dialog.getFiles();
-		if (selected.length != 0)
+		if (selected.length != 0) {
 			return selected;
+		}
 		throw new CancellationException();
 	}
 

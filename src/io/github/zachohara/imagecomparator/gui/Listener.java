@@ -30,7 +30,7 @@ import java.awt.event.WindowStateListener;
  * It also acts as an abstract class that contains functionality for notifying a
  * {@code Window} of an event. Most, but not all, of the listener classes inside
  * {@code Listener} will listen to a single button and report button presses.
- * 
+ *
  * @author Zach Ohara
  */
 public abstract class Listener {
@@ -49,7 +49,7 @@ public abstract class Listener {
 
 	/**
 	 * Constructs a new {@code Listener} with the given owner and button.
-	 * 
+	 *
 	 * @param win the window that all information should be returned to.
 	 * @param button the label of the button that this is registered to.
 	 */
@@ -62,7 +62,7 @@ public abstract class Listener {
 	 * Notifies the owner of this listener that the registered button has been pressed.
 	 */
 	public void notifyOwner() {
-		this.owner.handleButtonPress(buttonName);
+		this.owner.handleButtonPress(this.buttonName);
 	}
 
 	/**
@@ -71,14 +71,14 @@ public abstract class Listener {
 	public static class WindowResizeListener extends ComponentAdapter implements WindowStateListener {
 
 		/**
-		 * The {@code Window} that 'owns' this listener, and that all window events should be
-		 * reported back to.
+		 * The {@code Window} that 'owns' this listener, and that all window events should
+		 * be reported back to.
 		 */
 		private Window owner;
 
 		/**
 		 * Constructs a new {@code WindowResizeListener} with the given owner.
-		 * 
+		 *
 		 * @param win the window that all information should be returned to.
 		 */
 		public WindowResizeListener(Window win) {
@@ -86,7 +86,7 @@ public abstract class Listener {
 		}
 
 		/**
-		 * {@inheritDoc}}
+		 * {@inheritDoc}
 		 */
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -94,7 +94,7 @@ public abstract class Listener {
 		}
 
 		/**
-		 * {@inheritDoc}}
+		 * {@inheritDoc}
 		 */
 		@Override
 		public void windowStateChanged(WindowEvent e) {
@@ -120,18 +120,17 @@ public abstract class Listener {
 	}
 
 	/**
-	 * A listener that listens for the user clicking on a panel or frame with the mouse.
-	 * As per specification by the {@code MouseListener}, this listener must register
-	 * events when the mouse enters or exits the specified area, when the mouse is
-	 * pressed or is released, and when the mouse is clicked. For the purposes of this
-	 * listener, action is only taken when the mouse is clicked. All other mouse events
-	 * are ignored.
+	 * A listener that listens for the user clicking on a panel or frame with the mouse. As
+	 * per specification by the {@code MouseListener}, this listener must register events
+	 * when the mouse enters or exits the specified area, when the mouse is pressed or is
+	 * released, and when the mouse is clicked. For the purposes of this listener, action
+	 * is only taken when the mouse is clicked. All other mouse events are ignored.
 	 */
 	public static class MouseClickListener extends Listener implements MouseListener {
 
 		/**
 		 * Constructs a new listener with the given owner and button name.
-		 * 
+		 *
 		 * @param win the window that all information should be returned to.
 		 * @param button the label of the button or panel that this is registered to.
 		 */
@@ -148,10 +147,21 @@ public abstract class Listener {
 		}
 
 		// Ignore all of these:
-		public void mouseEntered(MouseEvent arg0) {}
-		public void mouseExited(MouseEvent arg0) {}
-		public void mousePressed(MouseEvent arg0) {}
-		public void mouseReleased(MouseEvent arg0) {}
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+		}
 
 	}
 

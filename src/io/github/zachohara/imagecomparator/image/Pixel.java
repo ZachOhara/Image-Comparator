@@ -18,46 +18,51 @@ package io.github.zachohara.imagecomparator.image;
 
 /**
  * The {@code Pixel} class contains static methods for comparing single pixels.
- * 
+ *
  * @author Zach Ohara.
  */
 public final class Pixel {
-	
+
 	/**
 	 * The {@code Pixel} class should not be instantiable.
 	 */
 	private Pixel() {
-		
+
 	}
 
 	/**
-	 * Compares two 8-bit RGB color integers and finds the difference between them. The returned
-	 * value is a decimal between zero and one that represents the percent of difference in
-	 * the two colors. This number is calculated using the following formula:
+	 * Compares two 8-bit RGB color integers and finds the difference between them. The
+	 * returned value is a decimal between zero and one that represents the percent of
+	 * difference in the two colors. This number is calculated using the following formula:
+	 *
 	 * <pre>
-	 * {@code
-	 * int redDifference = Math.abs(red1 - red2);
-	 * int blueDifference = Math.abs(blue1 - blue2);
-	 * int greenDifference = Math.abs(green1 - green2);
-	 * int sumDifference = redDifference + blueDifference + greenDifference;
-	 * double percentDifference = (double) sumDifference / (255 * 3);
+	 *
+	 * 
+	 * {
+	 * 	&#064;code
+	 * 	int redDifference = Math.abs(red1 - red2);
+	 * 	int blueDifference = Math.abs(blue1 - blue2);
+	 * 	int greenDifference = Math.abs(green1 - green2);
+	 * 	int sumDifference = redDifference + blueDifference + greenDifference;
+	 * 	double percentDifference = (double) sumDifference / (255 * 3);
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * @param color1 an RGB color integer to be compared
 	 * @param color2 another RGB color integer to be compared
-	 * @return a number between  0 and 1 representing the difference between the colors.
+	 * @return a number between 0 and 1 representing the difference between the colors.
 	 */
 	public static double colorDifference(int color1, int color2) {
-		double difference = Math.abs(getRed(color1) - getRed(color2))
-				+ Math.abs(getGreen(color1) - getGreen(color2))
-				+ Math.abs(getBlue(color1) - getBlue(color2));
+		double difference =
+				Math.abs(Pixel.getRed(color1) - Pixel.getRed(color2))
+						+ Math.abs(Pixel.getGreen(color1) - Pixel.getGreen(color2))
+				+ Math.abs(Pixel.getBlue(color1) - Pixel.getBlue(color2));
 		return difference / (255 * 3);
 	}
 
 	/**
 	 * Extracts the red componenet from the given RGB color integer.
-	 * 
+	 *
 	 * @param color the RGB integer to extract from.
 	 * @return the red componenet from the color
 	 */
@@ -67,7 +72,7 @@ public final class Pixel {
 
 	/**
 	 * Extracts the green componenet from the given RGB color integer.
-	 * 
+	 *
 	 * @param color the RGB integer to extract from.
 	 * @return the green componenet from the color
 	 */
@@ -77,7 +82,7 @@ public final class Pixel {
 
 	/**
 	 * Extracts the blue componenet from the given RGB color integer.
-	 * 
+	 *
 	 * @param color the RGB integer to extract from.
 	 * @return the blue componenet from the color
 	 */

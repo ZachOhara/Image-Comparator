@@ -18,6 +18,7 @@ package io.github.zachohara.imagecomparator.gui;
 
 import io.github.zachohara.imagecomparator.image.Image;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -31,9 +32,9 @@ import javax.swing.JPanel;
 
 /**
  * An {@code ImagePanel} is a {@code JPanel} that displays an image, and the name and
- * dimensions of that image. There are two {@code ImagePanel}s in the selection screen
- * in the main application {@code Window}.
- * 
+ * dimensions of that image. There are two {@code ImagePanel}s in the selection screen in
+ * the main application {@code Window}.
+ *
  * @author Zach Ohara
  */
 public class ImagePanel extends JPanel {
@@ -70,7 +71,6 @@ public class ImagePanel extends JPanel {
 	 */
 	private Dimension imageSize;
 
-
 	/**
 	 * The font size of the image information (dimensions and filename).
 	 */
@@ -79,7 +79,7 @@ public class ImagePanel extends JPanel {
 	/**
 	 * The {@code Font} for the image information (dimensions and filename).
 	 */
-	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, FONT_SIZE);
+	private static final Font INFO_FONT = new Font("Info panel font", Font.PLAIN, ImagePanel.FONT_SIZE);
 
 	/**
 	 * The height of the information panel.
@@ -87,8 +87,8 @@ public class ImagePanel extends JPanel {
 	private static final int INFO_PANEL_HEIGHT = 50;
 
 	/**
-	 * The amount of pixels to use as a border between the edge of the image and the
-	 * space available to this panel.
+	 * The amount of pixels to use as a border between the edge of the image and the space
+	 * available to this panel.
 	 */
 	private static final int IMAGE_BORDER = 20;
 
@@ -104,15 +104,16 @@ public class ImagePanel extends JPanel {
 	}
 
 	/**
-	 * Sets the image that should be displayed in this panel. This method will also
-	 * update the dimension and filename information in this panel.
-	 * 
+	 * Sets the image that should be displayed in this panel. This method will also update
+	 * the dimension and filename information in this panel.
+	 *
 	 * @param i the new {@code Image} for this panel.
 	 */
 	public void setImage(Image i) {
 		this.image = i;
-		if (this.componentImage != null)
+		if (this.componentImage != null) {
 			this.remove(this.componentImage);
+		}
 		this.imageSize = this.getScaledSize(i.getImage());
 		this.componentImage = this.getScaledImage();
 		this.filename.setText(i.getName());
@@ -126,8 +127,9 @@ public class ImagePanel extends JPanel {
 	 */
 	public void handleResize() {
 		this.resizeInfoPanel();
-		if (this.image != null)
+		if (this.image != null) {
 			this.setImage(this.image);
+		}
 	}
 
 	/**
@@ -149,17 +151,17 @@ public class ImagePanel extends JPanel {
 	 * Resizes the information panel based on the current size of the containing window.
 	 */
 	private void resizeInfoPanel() {
-		this.infoPanel.setSize(this.getWidth(), INFO_PANEL_HEIGHT);
+		this.infoPanel.setSize(this.getWidth(), ImagePanel.INFO_PANEL_HEIGHT);
 	}
 
 	/**
 	 * Formats the text in the information panel.
-	 * 
+	 *
 	 * @param panel the panel to format.
 	 */
 	private void formatInfoText(JLabel panel) {
-		panel.setFont(INFO_FONT);
-		panel.setAlignmentX(CENTER_ALIGNMENT);
+		panel.setFont(ImagePanel.INFO_FONT);
+		panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.infoPanel.add(panel);
 	}
 
@@ -169,34 +171,35 @@ public class ImagePanel extends JPanel {
 	private void resizeImage() {
 		this.componentImage.setSize(this.imageSize);
 		int imageAreaHeight = this.getHeight() - this.infoPanel.getHeight();
-		this.componentImage.setLocation((this.getWidth() / 2) - (this.imageSize.width / 2)
-				, (imageAreaHeight / 2) - (this.imageSize.height / 2));
+		this.componentImage.setLocation((this.getWidth() / 2) - (this.imageSize.width / 2),
+				(imageAreaHeight / 2) - (this.imageSize.height / 2));
 	}
 
 	/**
 	 * Converts the current {@code Image} object into a {@code JComponent} that can be
-	 * added to the window. This method will also resize the image so that it fits
-	 * within the available space.
-	 * 
+	 * added to the window. This method will also resize the image so that it fits within
+	 * the available space.
+	 *
 	 * @return a {@code JComponent} object that can be added to the window.
 	 */
 	private JComponent getScaledImage() {
-		return new JLabel(new ImageIcon(scale(this.image.getImage(), this.imageSize)));
+		return new JLabel(new ImageIcon(ImagePanel.scale(this.image.getImage(), this.imageSize)));
 	}
 
 	/**
 	 * Gets the size that the given image should be scaled to so that both its width and
 	 * height fit inside this panel, and so that the ratio between the width and height of
 	 * the image remains constant.
-	 * 
+	 *
 	 * @param image the image to scale.
 	 * @return the {@code Dimension} of the ideal scaled size of the given image.
 	 */
 	private Dimension getScaledSize(BufferedImage image) {
 		double height = image.getHeight();
 		double width = image.getWidth();
-		double scale = Math.max(height / (this.getHeight() - this.infoPanel.getHeight() - IMAGE_BORDER),
-				width / (this.getWidth() - IMAGE_BORDER));
+		double scale =
+				Math.max(height / (this.getHeight() - this.infoPanel.getHeight() - ImagePanel.IMAGE_BORDER),
+						width / (this.getWidth() - ImagePanel.IMAGE_BORDER));
 		if (scale > 1) {
 			height /= scale;
 			width /= scale;
@@ -205,9 +208,8 @@ public class ImagePanel extends JPanel {
 	}
 
 	/**
-	 * Scales the given {@code BufferedImage} to the size of the given
-	 * {@code Dimension}.
-	 * 
+	 * Scales the given {@code BufferedImage} to the size of the given {@code Dimension}.
+	 *
 	 * @param image the image to be scaled.
 	 * @param dim the size to scale the image to.
 	 * @return the scaled image.
