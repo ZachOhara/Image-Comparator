@@ -189,7 +189,7 @@ public class ImagePanel extends JPanel {
 	 * height fit inside this panel, and so that the ratio between the width and height of
 	 * the image remains constant.
 	 * 
-	 * @param image the image to scale
+	 * @param image the image to scale.
 	 * @return the {@code Dimension} of the ideal scaled size of the given image.
 	 */
 	private Dimension getScaledSize(BufferedImage image) {
