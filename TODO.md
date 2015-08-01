@@ -1,4 +1,4 @@
-# TO-DO List
+# TO-DO List for Image Comparator
 
 * Add an icon
 * Add multithreading so that images will continue to be searched while the program is waiting for user selection
